@@ -1,0 +1,125 @@
+<form id="siteMonitorForm" enctype="multipart/form-data" xmlns="http://www.w3.org/1999/html">
+    <div class="row">
+                    <div class="form-group col-md-6">
+                <label for="batchSize">Batch Size</label>
+                <input class="form-control" type="text" id="batchSize"
+                       name="batchSize" placeholder="Batch Size"
+                       value="{{ data.batchSize }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="batchCount">Batch Count</label>
+                <input class="form-control" type="text" id="batchCount"
+                       name="batchCount" placeholder="Batch Count"
+                       value="{{ data.batchCount }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="batchStarted">Batch Started</label>
+                <input class="form-control" type="text" id="batchStarted"
+                       name="batchStarted" placeholder="Batch Started"
+                       value="{{ data.batchStarted }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="sotfDelete">Sotf Delete</label>
+                <input class="form-control" type="text" id="sotfDelete"
+                       name="sotfDelete" placeholder="Sotf Delete"
+                       value="{{ data.sotfDelete }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="id">Id</label>
+                <input class="form-control" type="text" id="id"
+                       name="id" placeholder="Id"
+                       value="{{ data.id }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="tenantId">Tenant Id</label>
+                <input class="form-control" type="text" id="tenantId"
+                       name="tenantId" placeholder="Tenant Id"
+                       value="{{ data.tenantId }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="siteId">Site Id</label>
+                <input class="form-control" type="text" id="siteId"
+                       name="siteId" placeholder="Site Id"
+                       value="{{ data.siteId }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="monitorTypeId">Monitor Type Id</label>
+                <input class="form-control" type="text" id="monitorTypeId"
+                       name="monitorTypeId" placeholder="Monitor Type Id"
+                       value="{{ data.monitorTypeId }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="interval">Interval</label>
+                <input class="form-control" type="text" id="interval"
+                       name="interval" placeholder="Interval"
+                       value="{{ data.interval }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="status">Status</label>
+                <input class="form-control" type="text" id="status"
+                       name="status" placeholder="Status"
+                       value="{{ data.status }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="lastRun">Last Run</label>
+                <input class="form-control" type="text" id="lastRun"
+                       name="lastRun" placeholder="Last Run"
+                       value="{{ data.lastRun }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="nextRun">Next Run</label>
+                <input class="form-control" type="text" id="nextRun"
+                       name="nextRun" placeholder="Next Run"
+                       value="{{ data.nextRun }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="lastResult">Last Result</label>
+                <input class="form-control" type="text" id="lastResult"
+                       name="lastResult" placeholder="Last Result"
+                       value="{{ data.lastResult }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="lastStatusCode">Last Status Code</label>
+                <input class="form-control" type="text" id="lastStatusCode"
+                       name="lastStatusCode" placeholder="Last Status Code"
+                       value="{{ data.lastStatusCode }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="lastRunTime">Last Run Time</label>
+                <input class="form-control" type="text" id="lastRunTime"
+                       name="lastRunTime" placeholder="Last Run Time"
+                       value="{{ data.lastRunTime }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="lastRunDuration">Last Run Duration</label>
+                <input class="form-control" type="text" id="lastRunDuration"
+                       name="lastRunDuration" placeholder="Last Run Duration"
+                       value="{{ data.lastRunDuration }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="lastRunRawResult">Last Run Raw Result</label>
+                <input class="form-control" type="text" id="lastRunRawResult"
+                       name="lastRunRawResult" placeholder="Last Run Raw Result"
+                       value="{{ data.lastRunRawResult }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="active">Active</label>
+                <input class="form-control" type="text" id="active"
+                       name="active" placeholder="Active"
+                       value="{{ data.active }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="created_at">Created_at</label>
+                <input class="form-control" type="text" id="created_at"
+                       name="created_at" placeholder="Created_at"
+                       value="{{ data.created_at }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="updated_at">Updated_at</label>
+                <input class="form-control" type="text" id="updated_at"
+                       name="updated_at" placeholder="Updated_at"
+                       value="{{ data.updated_at }}">
+            </div>
+            </div>
+    {{"siteMonitorForm" | formToken | raw }}
+</form>

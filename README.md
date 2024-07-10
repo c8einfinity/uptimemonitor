@@ -1,2 +1,2 @@
 # uptime_monitor
-# Service to monitor server uptime etc
+Service to monitor server uptime etc

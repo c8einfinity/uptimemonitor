@@ -1,0 +1,65 @@
+<form id="siteForm" enctype="multipart/form-data" xmlns="http://www.w3.org/1999/html">
+    <div class="row">
+                    <div class="form-group col-md-6">
+                <label for="batchSize">Batch Size</label>
+                <input class="form-control" type="text" id="batchSize"
+                       name="batchSize" placeholder="Batch Size"
+                       value="{{ data.batchSize }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="batchCount">Batch Count</label>
+                <input class="form-control" type="text" id="batchCount"
+                       name="batchCount" placeholder="Batch Count"
+                       value="{{ data.batchCount }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="batchStarted">Batch Started</label>
+                <input class="form-control" type="text" id="batchStarted"
+                       name="batchStarted" placeholder="Batch Started"
+                       value="{{ data.batchStarted }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="sotfDelete">Sotf Delete</label>
+                <input class="form-control" type="text" id="sotfDelete"
+                       name="sotfDelete" placeholder="Sotf Delete"
+                       value="{{ data.sotfDelete }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="id">Id</label>
+                <input class="form-control" type="text" id="id"
+                       name="id" placeholder="Id"
+                       value="{{ data.id }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="tenantId">Tenant Id</label>
+                <input class="form-control" type="text" id="tenantId"
+                       name="tenantId" placeholder="Tenant Id"
+                       value="{{ data.tenantId }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="siteName">Site Name</label>
+                <input class="form-control" type="text" id="siteName"
+                       name="siteName" placeholder="Site Name"
+                       value="{{ data.siteName }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="siteAddress">Site Address</label>
+                <input class="form-control" type="text" id="siteAddress"
+                       name="siteAddress" placeholder="Site Address"
+                       value="{{ data.siteAddress }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="created_at">Created_at</label>
+                <input class="form-control" type="text" id="created_at"
+                       name="created_at" placeholder="Created_at"
+                       value="{{ data.created_at }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="updated_at">Updated_at</label>
+                <input class="form-control" type="text" id="updated_at"
+                       name="updated_at" placeholder="Updated_at"
+                       value="{{ data.updated_at }}">
+            </div>
+            </div>
+    {{"siteForm" | formToken | raw }}
+</form>
