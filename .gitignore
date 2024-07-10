@@ -13,3 +13,6 @@ public_html/log/
 #sqlite explorer - only for vs code
 database/*-shm
 database/*-wal
+
+.vscode/
+
