@@ -1,0 +1,11 @@
+#Production env File
+public_html/.env.production
+public_html/.env
+
+#Conposer
+public_html/vendor/
+
+#bin
+public_html/bin/
+
+public_html/log/
