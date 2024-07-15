@@ -1,8 +1,7 @@
 <?php
 
-
-\Tina4\Get::add("/api/users-login/landing", function (\Tina4\Response $response){
-    return $response (\Tina4\renderTemplate("/api/users-login/grid.twig"), HTTP_OK, TEXT_HTML);
+\Tina4\Get::add("/api/userlogins/landing", function (\Tina4\Response $response){
+    return $response (\Tina4\renderTemplate("/api/userlogins/grid.twig"), HTTP_OK, TEXT_HTML);
 });
         
 /**
@@ -10,8 +9,10 @@
  * Creates  GET @ /path, /path/{id}, - fetch,form for whole or for single
             POST @ /path, /path/{id} - create & update
             DELETE @ /path/{id} - delete for single
+ * @description UserLogins
+ * @tags UserLogins
  */
-\Tina4\Crud::route ("/api/users-login", new UserLogin(), function ($action, UserLogin $userLogin, $filter, \Tina4\Request $request) {
+\Tina4\Crud::route ("/api/userlogins", new UserLogin(), function ($action, UserLogin $userLogin, $filter, \Tina4\Request $request) {
     switch ($action) {
        case "form":
        case "fetch":
@@ -19,12 +20,12 @@
              
             if ($action == "form") {
                 $title = "Add UserLogin";
-                $savePath =  TINA4_SUB_FOLDER . "/api/users-login";
-                $content = \Tina4\renderTemplate("/api/users-login/form.twig", []);
+                $savePath =  TINA4_SUB_FOLDER . "/api/userlogins";
+                $content = \Tina4\renderTemplate("/api/userlogins/form.twig", []);
             } else {
                 $title = "Edit UserLogin";
-                $savePath =  TINA4_SUB_FOLDER . "/api/users-login/".$userLogin->id;
-                $content = \Tina4\renderTemplate("/api/users-login/form.twig", ["data" => $userLogin]);
+                $savePath =  TINA4_SUB_FOLDER . "/api/userlogins/".$userLogin->id;
+                $content = \Tina4\renderTemplate("/api/userlogins/form.twig", ["data" => $userLogin]);
             }
 
             return \Tina4\renderTemplate("components/modalForm.twig", ["title" => $title, "onclick" => "if ( $('#userLoginForm').valid() ) { saveForm('userLoginForm', '" .$savePath."', 'message'); $('#formModal').modal('hide');}", "content" => $content]);
@@ -45,22 +46,18 @@
             //Manipulate the $object here
         break;
         case "afterCreate":
-           //return needed 
-           return (object)["httpCode" => 200, "message" => "<script>userLoginGrid.ajax.reload(null, false); showMessage ('UserLogin Created');</script>"];
+        case "afterUpdate":
+            return $userLogin->asObject();
         break;
         case "update":
             //Manipulate the $object here
         break;    
-        case "afterUpdate":
-           //return needed 
-           return (object)["httpCode" => 200, "message" => "<script>userLoginGrid.ajax.reload(null, false); showMessage ('UserLogin Updated');</script>"];
-        break;   
         case "delete":
             //Manipulate the $object here
         break;
         case "afterDelete":
             //return needed 
-            return (object)["httpCode" => 200, "message" => "<script>userLoginGrid.ajax.reload(null, false); showMessage ('UserLogin Deleted');</script>"];
+            return (object)["httpCode" => 200, "message" => "UserLogin Deleted"];
         break;
     }
 });

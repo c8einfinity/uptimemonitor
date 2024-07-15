@@ -25,21 +25,23 @@
             integrity="sha256-NdDw7k+fJewgwI1XmH9NMR6OILvTX+3arqb/OgFicoM=" crossorigin="anonymous"></script>
     <script src="/js/tina4helper.js"></script>
     <link rel="stylesheet" href="/css/default.css">
-    <title>User</title>
+    <title>Notification</title>
 </head>
 
 <body>
-    <h3>User</h3>
-    <table id="userGrid" class="table table-striped table-bordered table-condensed" style="width:100%">
+    <h3>Notification</h3>
+    <table id="notificationGrid" class="table table-striped table-bordered table-condensed" style="width:100%">
         <thead>
         <tr>
                             <th>Batch Size</th>
                             <th>Batch Count</th>
                             <th>Batch Started</th>
                             <th>Id</th>
-                            <th>Username</th>
-                            <th>Password</th>
-                            <th>Email</th>
+                            <th>Server Id</th>
+                            <th>Email Alert</th>
+                            <th>Email Address</th>
+                            <th>Threshold</th>
+                            <th>Active</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                         <th>Options</th>
@@ -47,12 +49,12 @@
         </thead>
     </table>
     <script>
-        var userGrid = null;
+        var notificationGrid = null;
         $(document).ready(function () {
-            userGrid = $('#userGrid').DataTable({
+            notificationGrid = $('#notificationGrid').DataTable({
                 dom: '<"row"<"col-md-6"B><"col-md-4"f><"col-md-2"l>><rtip>',
                 ajax: {
-                        url: '/api/users',
+                        url: '/api/notifications',
                         data: function (d) {
                             d.formToken = formToken;
                         }
@@ -62,9 +64,11 @@
                                         {"data": "batchCount"},
                                         {"data": "batchStarted"},
                                         {"data": "id"},
-                                        {"data": "username"},
-                                        {"data": "password"},
-                                        {"data": "email"},
+                                        {"data": "serverId"},
+                                        {"data": "emailAlert"},
+                                        {"data": "emailAddress"},
+                                        {"data": "threshold"},
+                                        {"data": "active"},
                                         {"data": "createdAt"},
                                         {"data": "updatedAt"},
                                         {
@@ -72,8 +76,8 @@
                         "mRender": function (data, type, row) {
                             let html = '';
                             //loadForm parameters: api to retrieve modal form, target div id to load form to, row data, title of
-                            html += '<button class="btn btn-primary small-button" onclick="showForm(\'edit\',\'/api/users/' + row.id + '?formToken={{ formToken ("/api/users") }}\')">Edit</button>';
-                            html += ' <button class="btn btn-danger small-button" onclick="if (confirm(\'Delete  record ?\')) { showForm(\'delete\',\'/api/users/' + row.id + '?formToken={{ formToken ("/api/users") }}\');}">Del</button>';
+                            html += '<button class="btn btn-primary small-button" onclick="showForm(\'edit\',\'/api/notifications/' + row.id + '?formToken={{ formToken ("/api/notifications") }}\')">Edit</button>';
+                            html += ' <button class="btn btn-danger small-button" onclick="if (confirm(\'Delete  record ?\')) { showForm(\'delete\',\'/api/notifications/' + row.id + '?formToken={{ formToken ("/api/notifications") }}\');}">Del</button>';
                             return html;
 
                         },
@@ -90,7 +94,7 @@
                         text: 'Create',
                         action: function (e, dt, node, config) {
                             let data = {};
-                            showForm('create', '/api/users/form?formToken={{ formToken ("/api/users") }}');
+                            showForm('create', '/api/notifications/form?formToken={{ formToken ("/api/notifications") }}');
                         }
                     },
                     'copy', 'excel', 'pdf', 'print'

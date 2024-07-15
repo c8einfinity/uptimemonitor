@@ -10,9 +10,10 @@ public_html/bin/
 
 public_html/log/
 
-#sqlite explorer - only for vs code
-database/*-shm
-database/*-wal
+#sqlite database
+database/
 
 .vscode/
+
+/.idea/
 

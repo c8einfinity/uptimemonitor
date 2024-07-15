@@ -10,7 +10,7 @@
         "test": "@tina4 tests:run",
         "test:verbose": "@tina4 tests:verbose",
         "initialize": "@tina4 initialize:run",
-        "start": "@tina4 webservice:run",
+        "start": "@tina4 webservice:run 7150",
         "start-service": "@tina4service"
     },
     "classmap": [

@@ -1,4 +1,4 @@
-<form id="userForm" enctype="multipart/form-data" xmlns="http://www.w3.org/1999/html">
+<form id="userLoginForm" enctype="multipart/form-data" xmlns="http://www.w3.org/1999/html">
     <div class="row">
                     <div class="form-group col-md-6">
                 <label for="batchSize">Batch Size</label>
@@ -25,22 +25,34 @@
                        value="{{ data.id }}">
             </div>
                     <div class="form-group col-md-6">
-                <label for="username">Username</label>
-                <input class="form-control" type="text" id="username"
-                       name="username" placeholder="Username"
-                       value="{{ data.username }}">
+                <label for="dateTime">Date Time</label>
+                <input class="form-control" type="text" id="dateTime"
+                       name="dateTime" placeholder="Date Time"
+                       value="{{ data.dateTime }}">
             </div>
                     <div class="form-group col-md-6">
-                <label for="password">Password</label>
-                <input class="form-control" type="text" id="password"
-                       name="password" placeholder="Password"
-                       value="{{ data.password }}">
+                <label for="ipAddress">Ip Address</label>
+                <input class="form-control" type="text" id="ipAddress"
+                       name="ipAddress" placeholder="Ip Address"
+                       value="{{ data.ipAddress }}">
             </div>
                     <div class="form-group col-md-6">
-                <label for="email">Email</label>
-                <input class="form-control" type="text" id="email"
-                       name="email" placeholder="Email"
-                       value="{{ data.email }}">
+                <label for="userAgent">User Agent</label>
+                <input class="form-control" type="text" id="userAgent"
+                       name="userAgent" placeholder="User Agent"
+                       value="{{ data.userAgent }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="sessionId">Session Id</label>
+                <input class="form-control" type="text" id="sessionId"
+                       name="sessionId" placeholder="Session Id"
+                       value="{{ data.sessionId }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="status">Status</label>
+                <input class="form-control" type="text" id="status"
+                       name="status" placeholder="Status"
+                       value="{{ data.status }}">
             </div>
                     <div class="form-group col-md-6">
                 <label for="createdAt">Created At</label>
@@ -55,5 +67,5 @@
                        value="{{ data.updatedAt }}">
             </div>
             </div>
-    {{"userForm" | formToken | raw }}
+    {{"userLoginForm" | formToken | raw }}
 </form>

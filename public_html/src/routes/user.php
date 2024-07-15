@@ -1,6 +1,5 @@
 <?php
 
-
 \Tina4\Get::add("/api/users/landing", function (\Tina4\Response $response){
     return $response (\Tina4\renderTemplate("/api/users/grid.twig"), HTTP_OK, TEXT_HTML);
 });
@@ -10,6 +9,8 @@
  * Creates  GET @ /path, /path/{id}, - fetch,form for whole or for single
             POST @ /path, /path/{id} - create & update
             DELETE @ /path/{id} - delete for single
+ * @description Users
+ * @tags Users
  */
 \Tina4\Crud::route ("/api/users", new User(), function ($action, User $user, $filter, \Tina4\Request $request) {
     switch ($action) {
@@ -45,22 +46,18 @@
             //Manipulate the $object here
         break;
         case "afterCreate":
-           //return needed 
-           return (object)["httpCode" => 200, "message" => "<script>userGrid.ajax.reload(null, false); showMessage ('User Created');</script>"];
+        case "afterUpdate":
+            return $user->asObject();
         break;
         case "update":
             //Manipulate the $object here
         break;    
-        case "afterUpdate":
-           //return needed 
-           return (object)["httpCode" => 200, "message" => "<script>userGrid.ajax.reload(null, false); showMessage ('User Updated');</script>"];
-        break;   
         case "delete":
             //Manipulate the $object here
         break;
         case "afterDelete":
             //return needed 
-            return (object)["httpCode" => 200, "message" => "<script>userGrid.ajax.reload(null, false); showMessage ('User Deleted');</script>"];
+            return (object)["httpCode" => 200, "message" => "User Deleted"];
         break;
     }
 });

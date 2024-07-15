@@ -942,16 +942,16 @@
         },
         {
             "name": "tina4stack/tina4php",
-            "version": "v2.0.75",
+            "version": "v2.0.76",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tina4stack/tina4-php.git",
-                "reference": "7e3802c207edced3fb9bb944bf467eed81d1ec05"
+                "reference": "2fe7af48aaf148f2a225cad019cf87faf231e7e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tina4stack/tina4-php/zipball/7e3802c207edced3fb9bb944bf467eed81d1ec05",
-                "reference": "7e3802c207edced3fb9bb944bf467eed81d1ec05",
+                "url": "https://api.github.com/repos/tina4stack/tina4-php/zipball/2fe7af48aaf148f2a225cad019cf87faf231e7e9",
+                "reference": "2fe7af48aaf148f2a225cad019cf87faf231e7e9",
                 "shasum": ""
             },
             "require": {
@@ -1022,9 +1022,9 @@
             "description": "Tina4 PHP",
             "support": {
                 "issues": "https://github.com/tina4stack/tina4-php/issues",
-                "source": "https://github.com/tina4stack/tina4-php/tree/v2.0.75"
+                "source": "https://github.com/tina4stack/tina4-php/tree/v2.0.76"
             },
-            "time": "2024-06-30T19:50:57+00:00"
+            "time": "2024-07-12T12:00:58+00:00"
         },
         {
             "name": "tina4stack/tina4php-core",
@@ -1133,16 +1133,16 @@
         },
         {
             "name": "tina4stack/tina4php-debug",
-            "version": "v2.0.11",
+            "version": "v2.0.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tina4stack/tina4php-debug.git",
-                "reference": "68c8f8814c985631e02fd83fd3acb7873162afee"
+                "reference": "7e5f187fc5292ef3134bb728fc538e1953e27289"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tina4stack/tina4php-debug/zipball/68c8f8814c985631e02fd83fd3acb7873162afee",
-                "reference": "68c8f8814c985631e02fd83fd3acb7873162afee",
+                "url": "https://api.github.com/repos/tina4stack/tina4php-debug/zipball/7e5f187fc5292ef3134bb728fc538e1953e27289",
+                "reference": "7e5f187fc5292ef3134bb728fc538e1953e27289",
                 "shasum": ""
             },
             "require": {
@@ -1176,9 +1176,9 @@
             "description": "Tina4 PHP Debug Functionality",
             "support": {
                 "issues": "https://github.com/tina4stack/tina4php-debug/issues",
-                "source": "https://github.com/tina4stack/tina4php-debug/tree/v2.0.11"
+                "source": "https://github.com/tina4stack/tina4php-debug/tree/v2.0.13"
             },
-            "time": "2024-03-21T01:47:30+00:00"
+            "time": "2024-07-13T14:23:27+00:00"
         },
         {
             "name": "tina4stack/tina4php-env",
@@ -1226,20 +1226,21 @@
         },
         {
             "name": "tina4stack/tina4php-orm",
-            "version": "v2.0.16",
+            "version": "v2.0.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tina4stack/tina4php-orm.git",
-                "reference": "11288cee56ae67123473b0c36ddba39eb19187f1"
+                "reference": "5329e73e3b3780b034be5d415b40c8cfab0c3d77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tina4stack/tina4php-orm/zipball/11288cee56ae67123473b0c36ddba39eb19187f1",
-                "reference": "11288cee56ae67123473b0c36ddba39eb19187f1",
+                "url": "https://api.github.com/repos/tina4stack/tina4php-orm/zipball/5329e73e3b3780b034be5d415b40c8cfab0c3d77",
+                "reference": "5329e73e3b3780b034be5d415b40c8cfab0c3d77",
                 "shasum": ""
             },
             "require-dev": {
                 "overtrue/phplint": "^2.0",
+                "phpmetrics/phpmetrics": "^0.0.1",
                 "phpunit/phpunit": "^9",
                 "roave/security-advisories": "dev-latest",
                 "tina4stack/tina4php-firebird": "^2.0"
@@ -1262,9 +1263,9 @@
             "description": "Tina4 ORM Module",
             "support": {
                 "issues": "https://github.com/tina4stack/tina4php-orm/issues",
-                "source": "https://github.com/tina4stack/tina4php-orm/tree/v2.0.16"
+                "source": "https://github.com/tina4stack/tina4php-orm/tree/v2.0.17"
             },
-            "time": "2024-07-08T20:32:44+00:00"
+            "time": "2024-07-09T10:45:00+00:00"
         },
         {
             "name": "tina4stack/tina4php-shape",
@@ -1437,16 +1438,16 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "4.10.3",
+            "version": "4.10.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "ad3f913d39b2a4dfb6e59ee4babb35a6b4a2b998"
+                "reference": "88895afcfaac955ed061489a2b19a431bf58b3e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/ad3f913d39b2a4dfb6e59ee4babb35a6b4a2b998",
-                "reference": "ad3f913d39b2a4dfb6e59ee4babb35a6b4a2b998",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/88895afcfaac955ed061489a2b19a431bf58b3e2",
+                "reference": "88895afcfaac955ed061489a2b19a431bf58b3e2",
                 "shasum": ""
             },
             "require": {
@@ -1512,9 +1513,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/4.10.3"
+                "source": "https://github.com/zircote/swagger-php/tree/4.10.4"
             },
-            "time": "2024-07-04T07:53:11+00:00"
+            "time": "2024-07-10T02:06:32+00:00"
         }
     ],
     "packages-dev": [],
