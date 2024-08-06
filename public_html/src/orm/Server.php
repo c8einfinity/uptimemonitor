@@ -15,6 +15,7 @@ class Server extends \Tina4\ORM
 	public $active;
 	public $createdAt;
 	public $updatedAt;
+    public $tenantName;
 
 	public $requiredFields = array(
 		"tenantId",
@@ -23,5 +24,5 @@ class Server extends \Tina4\ORM
 		"active"
 	);
 
-	public $virtualFields = ["requiredFields"];
+	public $virtualFields = ["requiredFields", "tenantName"];
 }
