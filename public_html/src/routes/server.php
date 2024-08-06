@@ -12,14 +12,15 @@
  * @description Servers
  * @tags Servers
  */
-\Tina4\Crud::route ("/api/servers", new Server(), function ($action, Server $server, $filter, \Tina4\Request $request) {
+\Tina4\Crud::route ("/api/servers", new Server, function ($action, Server $server, $filter, \Tina4\Request $request) {
     switch ($action) {
        case "form":
        case "fetch":
             //Return back a form to be submitted to the create
 
+
             //Get the tenants (workspaces) to populate the select box
-            $tenants = array();
+
 
             $tenant = new Tenant();
             $tenants = $tenant->select("id, tenant_name")
@@ -47,9 +48,12 @@
             }
         
             return   $server->select ("*", $filter["length"], $filter["start"])
-                ->join("tenant", "tenant.id = server.tenantId", "INNER")
                 ->where("{$where}")
                 ->orderBy($filter["orderBy"])
+                ->filter(static function(Server $data) {
+                    $tenant = (new Tenant())->load("id = ?", [$data->tenantId])->asObject();
+                    $data->tenantName = $tenant->tenantName;
+                })
                 ->asResult();
         break;
         case "create":
