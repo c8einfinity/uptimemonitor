@@ -43,56 +43,22 @@
                 ->asResult();
         break;
         case "create":
-            try {
-                $notification = (new Notification());
+            $result = checkRequiredFields($request, $notification->requiredFields);
 
-                $requiredFields = array(
-                    "tenantId",
-                    "notificationType",
-                    "notificationMessage"
-                );
-
-                $result = buildObject($request, $requiredFields);
-
-                if ($result->httpCode != HTTP_OK)
-                    return $result;
-
-                $notification = $result;
-
-                if ($notification->save())
-                    return (object)["httpCode" => HTTP_OK, "message" => "Notification Created"];
-                else return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => "Notification not created"];
-            }
-            catch (\Exception $exception) {
-                return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => $exception->getMessage()];
-            }
-
+            if ($result->httpCode != HTTP_OK)
+                exit(json_encode($result)); //Terminate the script
         break;
         case "afterCreate":
         case "afterUpdate":
             return $notification->asObject();
         break;
         case "delete":
-            try {
-                if (empty($request->inlineParams[0]))
-                    return (object)["httpCode" => HTTP_BAD_REQUEST, "message" => "Notification ID is required"];
-
-                $notification = (new Notification());
-                $notification->id = $request->inlineParams[0];
-                
-                if ($notification->load()) {
-                    $notification->delete();
-                    return (object)["httpCode" => HTTP_OK, "message" => "Notification Deleted"];
-                }
-                else return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => "Notification could not be deleted"];
-            }
-            catch (\Exception $exception) {
-                return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => $exception->getMessage()];
-            }
+            if (empty($request->inlineParams[0]))
+                exit(json_encode(["httpCode" => HTTP_BAD_REQUEST, "message" => "Notification ID is required"]));
         break;
         case "afterDelete":
             //return needed 
-            return (object)["httpCode" => 200, "message" => "Notification Deleted"];
+            return (object)["httpCode" => HTTP_OK, "message" => "Notification Deleted"];
         break;
     }
 });

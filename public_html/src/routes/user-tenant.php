@@ -43,24 +43,20 @@
                 ->asResult();
         break;
         case "create":
-            //Manipulate the $object here
+            $result = checkRequiredFields($request, $userTenant->requiredFields);
+
+            if ($result->httpCode != HTTP_OK)
+                exit(json_encode($result)); //Terminate the script
         break;
         case "afterCreate":
         case "afterUpdate":
             return $userTenant->asObject();
         break;
-        case "update":
-            //Manipulate the $object here
-        break;    
-        case "afterUpdate":
-           //return needed 
-           return (object)["httpCode" => 200, "message" => "<script>userTenantGrid.ajax.reload(null, false); showMessage ('UserTenant Updated');</script>"];
-        break;   
         case "delete":
-            //Manipulate the $object here
+            if (empty($request->inlineParams[0]))
+                exit(json_encode(["httpCode" => 400, "message" => "UserTenant ID is required"])); //Terminate the script
         break;
         case "afterDelete":
-            //return needed 
-            return (object)["httpCode" => 200, "message" => "UserTenant Deleted"];
+            return (object)["httpCode" => HTTP_OK, "message" => "UserTenant Deleted"];
     }
 });

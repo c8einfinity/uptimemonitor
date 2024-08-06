@@ -3,6 +3,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
+                <div id="message"></div>
                 <div class="card mt-5">
                     <div class="card-header text-center">
                         <h2>User Login</h2>
@@ -11,21 +12,42 @@
                         {% if error %}
                             <div class="alert alert-danger">{{ error }}</div>
                         {% endif %}
-                        <form action="" method="post">
+                        <form id="loginForm">
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username:</label>
-                                <input type="text" id="username" name="_username" class="form-control" value="{{ last_username }}" required>
+                                <input type="text" id="username" name="username" class="form-control" value="{{ last_username }}" required>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password:</label>
-                                <input type="password" id="password" name="_password" class="form-control" required>
+                                <input type="password" id="password" name="password" class="form-control" required>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                            {{ "loginForm" | formToken | raw }}
+                            <a href="#" onClick="javascript:loginUser();" class="btn btn-primary w-100">Login</a>
                         </form>
                     </div>
                 </div>
             </div>
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center"><a class="btn" href="/register">click here to register</a></div>
+            </div>
         </div>
     </div>
+    {% block javascripts %}
+        <script>
+            function loginUser() {
+                $("#loginForm").validate();
+
+                if ($("#loginForm").valid()) {
+                    let data = getFormData("loginForm");
+
+                    sendRequest('/api/users/login', data, "POST", processResponse);
+                }
+            }
+
+            
+
+        </script>
+        
+   {% endblock %}  
 
 {% endblock %}

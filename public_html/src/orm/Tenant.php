@@ -12,4 +12,10 @@ class Tenant extends \Tina4\ORM
 	public $tenantName;
 	public $createdAt;
 	public $updatedAt;
+
+    public $requiredFields = array(
+        "tenantName"
+    );
+
+    public $virtualFields = ["requiredFields"];
 }

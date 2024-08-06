@@ -16,4 +16,13 @@ class Notification extends \Tina4\ORM
 	public $active;
 	public $createdAt;
 	public $updatedAt;
+
+	public $requiredFields = array(
+		"emailAlert",
+		"emailAddress",
+		"threshold",
+		"active"
+	);
+
+	public $virtualFields = ["requiredFields"];
 }

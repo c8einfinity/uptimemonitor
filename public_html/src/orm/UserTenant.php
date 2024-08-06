@@ -13,4 +13,11 @@ class UserTenant extends \Tina4\ORM
 	public $tenantId;
 	public $createdAt;
 	public $updatedAt;
+
+    public $requiredFields = array(
+        "userId",
+        "tenantId"
+    );
+
+    public $virtualFields = ["requiredFields"];
 }

@@ -17,15 +17,24 @@
        case "form":
        case "fetch":
             //Return back a form to be submitted to the create
+
+            //Get the tenants (workspaces) to populate the select box
+            $tenants = array();
+
+            $tenant = new Tenant();
+            $tenants = $tenant->select("id, tenant_name")
+                ->orderBy("tenant_name")
+                ->asArray();
+
              
             if ($action == "form") {
                 $title = "Add Server";
                 $savePath =  TINA4_SUB_FOLDER . "/api/servers";
-                $content = \Tina4\renderTemplate("/api/servers/form.twig", []);
+                $content = \Tina4\renderTemplate("/api/servers/form.twig", ["tenants" => $tenants]);
             } else {
                 $title = "Edit Server";
                 $savePath =  TINA4_SUB_FOLDER . "/api/servers/".$server->id;
-                $content = \Tina4\renderTemplate("/api/servers/form.twig", ["data" => $server]);
+                $content = \Tina4\renderTemplate("/api/servers/form.twig", ["data" => $server, "tenants" => $tenants]);
             }
 
             return \Tina4\renderTemplate("components/modalForm.twig", ["title" => $title, "onclick" => "if ( $('#serverForm').valid() ) { saveForm('serverForm', '" .$savePath."', 'message'); $('#formModal').modal('hide');}", "content" => $content]);
@@ -38,63 +47,28 @@
             }
         
             return   $server->select ("*", $filter["length"], $filter["start"])
+                ->join("tenant", "tenant.id = server.tenantId", "INNER")
                 ->where("{$where}")
                 ->orderBy($filter["orderBy"])
                 ->asResult();
         break;
         case "create":
-            try {
-                $server = (new Server());
+            $result = checkRequiredFields($request, $server->requiredFields);
 
-                //Populate the required fields
-                $requiredFields = array(
-                    "serverName",
-                    "serverIP",
-                    "serverPort",
-                    "serverType"
-                );
-
-                $result = buildObject($request, $requiredFields);
-
-                if ($result->httpCode != HTTP_OK)
-                    return $result;
-
-                $server = $result;
-
-                //Now save the server
-                if ($server->save())
-                    return (object)["httpCode" => HTTP_OK, "message" => "Server Created"];
-                else return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => "Server could not be created"];
-            }
-            catch (\Exception $exception) {
-                return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => $exception->getMessage()];
-            }
+            if ($result->httpCode != HTTP_OK)
+                exit(json_encode($result)); //Terminate the script
         break;
         case "afterCreate":
         case "afterUpdate":
             return $server->asObject();
         break;
         case "delete":
-            try {
-                if (empty($request->inlineParams[0]))
-                    return (object)["httpCode" => HTTP_BAD_REQUEST, "message" => "Server ID is required"];
-
-                $server = (new Server());
-                $server->id = $request->inlineParams[0];
-
-                if ($server->load()) {
-                    $server->delete();
-                    return (object)["httpCode" => HTTP_OK, "message" => "Server Deleted"];
-                }
-                else return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => "Server could not be deleted"]; 
-            }
-            catch (\Exception $exception) {
-                return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => $exception->getMessage()];
-            }
+            if (empty($request->inlineParams[0]))
+                exit(json_encode(["httpCode" => HTTP_BAD_REQUEST, "message" => "Server ID is required"]));
         break;
         case "afterDelete":
             //return needed 
-            return (object)["httpCode" => 200, "message" => "Server Deleted"];
+            return (object)["httpCode" => HTTP_OK, "message" => "Server Deleted"];
         break;
     }
 });

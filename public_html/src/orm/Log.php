@@ -14,4 +14,12 @@ class Log extends \Tina4\ORM
 	public $monitorType;
 	public $statusCode;
 	public $rawResult;
+
+    public $requiredFields = array(
+        "monitorType",
+        "statusCode",
+        "rawResult"
+    );
+
+    public $virtualFields = ["requiredFields"];
 }

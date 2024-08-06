@@ -43,50 +43,22 @@
                 ->asResult();
         break;
         case "create":
-            try {
-                $tenant = (new Tenant());
-                
-                //Populate the required fields array
-                $requiredFields = array(
-                    "tenantName"
-                );
+            $result = checkRequiredFields($request, $tenant->requiredFields);
 
-                $result = buildObject($request, $requiredFields);
+            //Set the updated_at field if tenant already exists
+            if ($tenant->id > 0)
+                $tenant->updated_at = date("Y-m-d H:i:s");
 
-                if ($result->httpCode != HTTP_OK)
-                    return $result;
-
-                $tenant = $result;
-                
-                //Now save the tenant
-                if ($tenant->save())
-                    return (object)["httpCode" => HTTP_OK, "message" => "Tenant Created or Updated"];
-                else return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => "Tenant Creation or Update Failed"];
-            } catch (\Exception $exception) {
-                return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => $exception->getMessage()];
-            }
+            if ($result->httpCode != HTTP_OK)
+                exit(json_encode($result)); //Terminate the script
         break;
         case "afterCreate":
         case "afterUpdate":
             return $tenant->asObject();
         break;
         case "delete":
-            try {
-                if (empty($request->inlineParams[0]))
-                    return (object)["httpCode" => HTTP_BAD_REQUEST, "message" => "Tenant ID is required"];
-                
-                $tenant = (new Tenant());
-                $tenant->id = $request->inlineParams[0];
-
-                if ($tenant->load()) {
-                    $tenant->delete();
-                    return (object)["httpCode" => HTTP_OK, "message" => "Tenant Deleted"];
-                }
-                else return (object)["httpCode" => HTTP_BAD_REQUEST, "message" => "Tenant not found"];
-            }
-            catch (\Exception $exception) {
-                return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => $exception->getMessage()];
-            }
+            if (empty($request->inlineParams[0]))
+                exit(json_encode(["httpCode" => HTTP_BAD_REQUEST, "message" => "Tenant ID is required"])); //Terminate the script
         break;
         case "afterDelete":
             return (object)["httpCode" => HTTP_OK, "message" => "Tenant Deleted"];

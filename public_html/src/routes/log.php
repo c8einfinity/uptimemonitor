@@ -43,57 +43,22 @@
                 ->asResult();
         break;
         case "create":
-            try {
-                $log = (new Log());
+            //Check all required fields - helpers/general.php
+            $result = checkRequiredFields($request, $log->requiredFields);
 
-                $requiredFields = array(
-                    "serverId",
-                    "monitorType",
-                    "statusCode",
-                    "rawResult"
-                );
-
-                //Check all required fields - helpers/general.php
-                $result = buildObject($request, $requiredFields);
-
-                if ($result->httpCode != HTTP_OK)
-                    return $result;
-                
-                $log = $result;
-
-                if ($log->save())
-                    return (object)["httpCode" => HTTP_OK, "message" => "Log Created or Updated"];
-                else return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => "Log Creation or Update Failed"];
-            }   
-            catch (\Exception $exception) {
-                return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => $exception->getMessage()];
-            }
+            if ($result->httpCode != HTTP_OK)
+                exit(json_encode($result)); //Terminate the script
         break;
         case "afterCreate":
         case "afterUpdate":
             return $log->asObject();
         break;
         case "delete":
-            try {
-                if (empty($request->inlineParams[0]))
-                    return (object)["httpCode" => HTTP_BAD_REQUEST, "message" => "Log ID is required"];
-                
-                $log = (new Log());
-                $log->id = $request->inlineParams[0];
-
-                if ($log->load()) {
-                    $log->delete();
-                    return (object)["httpCode" => HTTP_OK, "message" => "Log Deleted"];
-                }
-                else return (object)["httpCode" => HTTP_BAD_REQUEST, "message" => "Log not found"];
-            
-            }
-            catch (\Exception $exception) {
-                return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => $exception->getMessage()];
-            }
+            if (empty($request->inlineParams[0]))
+                exit(json_encode(["httpCode" => HTTP_BAD_REQUEST, "message" => "Log ID is required"])); //Terminate the script
         break;
         case "afterDelete":
-            return (object) ["httpCode" => 200, "message" => "Log Entry Deleted"];
+            return (object) ["httpCode" => HTTP_OK, "message" => "Log Entry Deleted"];
         break;
     }
 });

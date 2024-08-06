@@ -15,4 +15,13 @@ class Server extends \Tina4\ORM
 	public $active;
 	public $createdAt;
 	public $updatedAt;
+
+	public $requiredFields = array(
+		"tenantId",
+		"serverName",
+		"serverDescription",
+		"active"
+	);
+
+	public $virtualFields = ["requiredFields"];
 }

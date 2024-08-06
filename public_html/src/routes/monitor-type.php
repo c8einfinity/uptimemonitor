@@ -43,48 +43,18 @@
                 ->asResult();
         break;
         case "create":
-            try {
-                $monitorType = (new MonitorType());
+            $result = checkRequiredFields($request, $monitorType->requiredFields);
 
-                //Populate the required fields array
-                $requiredFields = array(
-                    "monitorType"
-                );
-
-                $result = buildObject($request, $requiredFields);
-
-                if ($result->httpCode != HTTP_OK)
-                    return $result;
-
-                if ($monitorType->save())
-                    return (object)["httpCode" => HTTP_OK, "message" => "MonitorType Created"];
-                else return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => "MonitorType could not be created"];
-            } 
-            catch (\Exception $exception) {
-                return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => $exception->getMessage()];
-            }
+            if ($result->httpCode != HTTP_OK)
+                exit(json_encode($result)); //Terminate the script
         break;
         case "afterCreate":
         case "afterUpdate":
             return $monitorType->asObject();
         break;
         case "delete":
-            try {
-                if (empty($request->inlineParams[0]))
-                    return (object)["httpCode" => HTTP_BAD_REQUEST, "message" => "MonitorType ID is required"];
-
-                $monitorType = (new MonitorType());
-                $monitorType->id = $request->inlineParams[0];
-
-                if ($monitorType->load()) {
-                    $monitorType->delete();
-                    return (object)["httpCode" => HTTP_OK, "message" => "MonitorType Deleted"];
-                }
-                else return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => "MonitorType could not be deleted"];
-            }
-            catch (\Exception $exception) {
-                return (object)["httpCode" => HTTP_INTERNAL_SERVER_ERROR, "message" => $exception->getMessage()];
-            }
+            if (empty($request->inlineParams[0]))
+                exit(json_encode(["httpCode" => HTTP_BAD_REQUEST, "message" => "MonitorType ID is required"]));
         break;
         case "afterDelete":
             return (object)["httpCode" => HTTP_OK, "message" => "MonitorType Deleted"];

@@ -10,4 +10,10 @@ class MonitorType extends \Tina4\ORM
     
 	public $id;
 	public $monitorType;
+
+    public $requiredFields = array(
+        "monitorType"
+    );
+
+    public $virtualFields = ["requiredFields"];
 }

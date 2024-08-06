@@ -1,0 +1,49 @@
+{% extends "base.twig" %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div id="message"></div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h2>Register</h2>
+                    </div>
+                    <div class="card-body">
+                        
+                        <form id="registerForm">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email address</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            {{ "registerForm" | formToken | raw }}
+                            <a href="#" class="btn btn-primary w-100" onClick="javascript:registerUser();">Register</a>
+                        </form>
+                    </div>
+                </div>
+                <div class="row justify-content-center"><a class="btn text-center" href="/">back to login</a></div>
+            </div>
+        </div>
+    </div>
+    {% block javascripts %}
+        <script>
+            function registerUser() {
+                saveForm('registerForm', '/api/users', null, processResponse);
+            }
+
+            function processResponse(data) {
+                if (data.id == undefined)
+                    showMessage(data);
+                else showMessage('User created. You can now login');
+            }
+        </script>
+        
+   {% endblock %}  
+{% endblock %}

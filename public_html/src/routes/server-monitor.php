@@ -43,25 +43,22 @@
                 ->asResult();
         break;
         case "create":
-            //Manipulate the $object here
+            $result = checkRequiredFields($request, $serverMonitor->requiredFields);
+
+            if ($result->httpCode != HTTP_OK)
+                exit(json_encode($result)); //Terminate the script
         break;
         case "afterCreate":
         case "afterUpdate":
             return $serverMonitor->asObject();
         break;
-        case "update":
-            //Manipulate the $object here
-        break;    
-        case "afterUpdate":
-           //return needed 
-           return (object)["httpCode" => 200, "message" => "<script>serverMonitorGrid.ajax.reload(null, false); showMessage ('ServerMonitor Updated');</script>"];
-        break;   
         case "delete":
-            //Manipulate the $object here
+            if (empty($request->inlineParams[0]))
+                exit(json_encode(["httpCode" => HTTP_BAD_REQUEST, "message" => "ServerMonitor ID is required"]));
         break;
         case "afterDelete":
             //return needed 
-            return (object)["httpCode" => 200, "message" => "ServerMonitor Deleted"];
+            return (object)["httpCode" => HTTP_OK, "message" => "ServerMonitor Deleted"];
         break;
     }
 });

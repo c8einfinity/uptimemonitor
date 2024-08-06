@@ -14,4 +14,12 @@ class User extends \Tina4\ORM
 	public $email;
 	public $createdAt;
 	public $updatedAt;
+
+    public $requiredFields = array(
+        "username",
+        "password",
+        "email"
+    );
+
+    public $virtualFields = ["requiredFields"];
 }

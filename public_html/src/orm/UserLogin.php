@@ -9,6 +9,7 @@ class UserLogin extends \Tina4\ORM
     //public $softDelete=true; //uncomment for soft deletes in crud 
     
 	public $id;
+	public $userId;
 	public $dateTime;
 	public $ipAddress;
 	public $userAgent;
@@ -16,4 +17,15 @@ class UserLogin extends \Tina4\ORM
 	public $status;
 	public $createdAt;
 	public $updatedAt;
+
+	public $requiredFields = array(
+		"userId",
+		"dateTime",
+		"ipAddress",
+		"userAgent",
+		"sessionId",
+		"status"
+	);
+
+	public $virtualFields = ["requiredFields"];
 }

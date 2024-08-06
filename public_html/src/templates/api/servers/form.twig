@@ -1,65 +1,28 @@
 <form id="serverForm" enctype="multipart/form-data" xmlns="http://www.w3.org/1999/html">
     <div class="row">
-                    <div class="form-group col-md-6">
-                <label for="batchSize">Batch Size</label>
-                <input class="form-control" type="text" id="batchSize"
-                       name="batchSize" placeholder="Batch Size"
-                       value="{{ data.batchSize }}">
+        <div class="form-group col-md-6">
+            <label for="tenantId">Workspace</label>
+            <select class="form-control" type="text" id="tenantId" name="tenantId">
+                <option value="">-- select workspace --</option>
+                {% for tenant in tenants %}
+                    <option value="{{ tenant.id }}">{{ tenant.tenantName }}</option>
+                {% endfor %}    
+            </select>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="serverName">Server Name</label>
+            <input class="form-control" type="text" id="serverName" name="serverName" placeholder="Server Name" value="{{ data.serverName }}">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="serverDescription">Server Description</label>
+            <input class="form-control" type="text" id="serverDescription" name="serverDescription" placeholder="Server Description" value="{{ data.serverDescription }}">
+        </div>
+        <div class="form-group col-md-6">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="active" name="active" value="1" {{ data.active ? 'checked' : '' }}>
+                <label class="form-check-label" for="active">Active</label>
             </div>
-                    <div class="form-group col-md-6">
-                <label for="batchCount">Batch Count</label>
-                <input class="form-control" type="text" id="batchCount"
-                       name="batchCount" placeholder="Batch Count"
-                       value="{{ data.batchCount }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="batchStarted">Batch Started</label>
-                <input class="form-control" type="text" id="batchStarted"
-                       name="batchStarted" placeholder="Batch Started"
-                       value="{{ data.batchStarted }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="id">Id</label>
-                <input class="form-control" type="text" id="id"
-                       name="id" placeholder="Id"
-                       value="{{ data.id }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="tenantId">Tenant Id</label>
-                <input class="form-control" type="text" id="tenantId"
-                       name="tenantId" placeholder="Tenant Id"
-                       value="{{ data.tenantId }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="serverName">Server Name</label>
-                <input class="form-control" type="text" id="serverName"
-                       name="serverName" placeholder="Server Name"
-                       value="{{ data.serverName }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="serverDescription">Server Description</label>
-                <input class="form-control" type="text" id="serverDescription"
-                       name="serverDescription" placeholder="Server Description"
-                       value="{{ data.serverDescription }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="active">Active</label>
-                <input class="form-control" type="text" id="active"
-                       name="active" placeholder="Active"
-                       value="{{ data.active }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="createdAt">Created At</label>
-                <input class="form-control" type="text" id="createdAt"
-                       name="createdAt" placeholder="Created At"
-                       value="{{ data.createdAt }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="updatedAt">Updated At</label>
-                <input class="form-control" type="text" id="updatedAt"
-                       name="updatedAt" placeholder="Updated At"
-                       value="{{ data.updatedAt }}">
-            </div>
-            </div>
+        </div>
+    </div>
     {{"serverForm" | formToken | raw }}
 </form>

@@ -43,21 +43,22 @@
                 ->asResult();
         break;
         case "create":
-            //Manipulate the $object here
+            $result = checkRequiredFields($request, $userLogin->requiredFields);
+
+            if ($result->httpCode != HTTP_OK)
+                exit(json_encode($result)); //Terminate the script
         break;
         case "afterCreate":
         case "afterUpdate":
             return $userLogin->asObject();
         break;
-        case "update":
-            //Manipulate the $object here
-        break;    
         case "delete":
-            //Manipulate the $object here
+            if (empty($request->inlineParams[0]))
+                exit(json_encode(["httpCode" => 400, "message" => "UserLogin ID is required"])); //Terminate the script
         break;
         case "afterDelete":
             //return needed 
-            return (object)["httpCode" => 200, "message" => "UserLogin Deleted"];
+            return (object)["httpCode" => HTTP_OK, "message" => "UserLogin Deleted"];
         break;
     }
 });
