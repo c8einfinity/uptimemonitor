@@ -42,19 +42,21 @@
                 ->orderBy($filter["orderBy"])
                 ->asResult();
         break;
+        case "update":
+            $tenant->updated_at = date("Y-m-d H:i:s");
+            break;
         case "create":
             $result = checkRequiredFields($request, $tenant->requiredFields);
 
             //Set the updated_at field if tenant already exists
             if ($tenant->id > 0)
                 $tenant->updated_at = date("Y-m-d H:i:s");
-
-            if ($result->httpCode != HTTP_OK)
-                exit(json_encode($result)); //Terminate the script
         break;
         case "afterCreate":
         case "afterUpdate":
-            return $tenant->asObject();
+            if (!empty($request->data->formToken))
+                return (object)["httpCode" => HTTP_OK, "message" => "<script>tenantGrid.ajax.reload((null, false));</script>"];
+            else return $tenant->asObject();
         break;
         case "delete":
             if (empty($request->inlineParams[0]))

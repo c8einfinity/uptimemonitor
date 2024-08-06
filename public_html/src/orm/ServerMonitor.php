@@ -24,6 +24,7 @@ class ServerMonitor extends \Tina4\ORM
 	public $active;
 	public $createdAt;
 	public $updatedAt;
+	public $serverName;
 
 	public $requiredFields = array(
 		"serverId",
@@ -32,5 +33,5 @@ class ServerMonitor extends \Tina4\ORM
 		"active"
 	);
 
-	public $virtualFields = ["requiredFields"];
+	public $virtualFields = ["requiredFields", "serverName"];
 }

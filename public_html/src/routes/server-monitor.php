@@ -17,15 +17,21 @@
        case "form":
        case "fetch":
             //Return back a form to be submitted to the create
+
+            //Get the servers
+            $server = new Server();
+            $servers = $server->select("id, server_name")
+                ->orderBy("server_name")
+                ->asArray();
              
             if ($action == "form") {
                 $title = "Add ServerMonitor";
                 $savePath =  TINA4_SUB_FOLDER . "/api/servermonitors";
-                $content = \Tina4\renderTemplate("/api/servermonitors/form.twig", []);
+                $content = \Tina4\renderTemplate("/api/servermonitors/form.twig", ["servers" => $servers]);
             } else {
                 $title = "Edit ServerMonitor";
                 $savePath =  TINA4_SUB_FOLDER . "/api/servermonitors/".$serverMonitor->id;
-                $content = \Tina4\renderTemplate("/api/servermonitors/form.twig", ["data" => $serverMonitor]);
+                $content = \Tina4\renderTemplate("/api/servermonitors/form.twig", ["data" => $serverMonitor, "servers" => $servers]);
             }
 
             return \Tina4\renderTemplate("components/modalForm.twig", ["title" => $title, "onclick" => "if ( $('#serverMonitorForm').valid() ) { saveForm('serverMonitorForm', '" .$savePath."', 'message'); $('#formModal').modal('hide');}", "content" => $content]);

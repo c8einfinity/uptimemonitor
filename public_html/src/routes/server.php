@@ -20,8 +20,6 @@
 
 
             //Get the tenants (workspaces) to populate the select box
-
-
             $tenant = new Tenant();
             $tenants = $tenant->select("id, tenant_name")
                 ->orderBy("tenant_name")
@@ -56,23 +54,33 @@
                 })
                 ->asResult();
         break;
+        case "update":
+            //Set the updated_at field
+            $server->updatedAt = date("Y-m-d H:i:s");
+            break;
         case "create":
             $result = checkRequiredFields($request, $server->requiredFields);
 
             if ($result->httpCode != HTTP_OK)
-                exit(json_encode($result)); //Terminate the script
+            {
+                //If we are using the API
+                if (empty($request->data->formToken))
+                    exit(json_encode($result)); //Terminate the script
+            }
         break;
         case "afterCreate":
         case "afterUpdate":
-            return $server->asObject();
+            //If we are using the forms
+            if (!empty($request->data->formToken))
+                return (object)["httpCode" => HTTP_OK, "message" => "<script>serverGrid.ajax.reload((null, false));</script>"];
+            else return $server->asObject();
         break;
         case "delete":
             if (empty($request->inlineParams[0]))
                 exit(json_encode(["httpCode" => HTTP_BAD_REQUEST, "message" => "Server ID is required"]));
         break;
         case "afterDelete":
-            //return needed 
-            return (object)["httpCode" => HTTP_OK, "message" => "Server Deleted"];
+            return (object)["httpCode" => HTTP_OK, "message" => "<script>serverGrid.ajax.reload((null, false)); showMessage('Server Deleted');</script>"];
         break;
     }
 });

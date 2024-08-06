@@ -2,16 +2,16 @@
     <div class="row">
         <div class="form-group col-md-6">
             <label for="tenantId">Workspace</label>
-            <select class="form-control" type="text" id="tenantId" name="tenantId">
+            <select class="form-control" type="text" id="tenantId" name="tenantId" required>
                 <option value="">-- select workspace --</option>
                 {% for tenant in tenants %}
-                    <option value="{{ tenant.id }}">{{ tenant.tenantName }}</option>
+                    <option value="{{ tenant.id }}" {{ data.tenantId == tenant.id ? 'selected' : '' }}>{{ tenant.tenantName }}</option>
                 {% endfor %}    
             </select>
         </div>
         <div class="form-group col-md-6">
             <label for="serverName">Server Name</label>
-            <input class="form-control" type="text" id="serverName" name="serverName" placeholder="Server Name" value="{{ data.serverName }}">
+            <input class="form-control" type="text" id="serverName" name="serverName" placeholder="Server Name" value="{{ data.serverName }}" required>
         </div>
         <div class="form-group col-md-6">
             <label for="serverDescription">Server Description</label>
