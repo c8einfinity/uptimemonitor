@@ -4,10 +4,10 @@ namespace helpers;
 
 class PortTester
 {
-    public $host;
-    public $ports;
+    private $host;
+    private $ports;
 
-    public function __construct($host, $ports = [80])
+    public function __construct($host, $ports = null)
     {
         $this->host = $host;
         $this->ports = $ports;
@@ -16,27 +16,35 @@ class PortTester
     public function check(): array
     {
         \Tina4\Debug::message("Checking " . $this->host);
-        $list = [];
+        $results = array();
 
         error_reporting(0);
         set_error_handler(null);
 
         foreach ($this->ports as $port) {
             try {
+                $status = false;
+                
                 //$connection = @fsockopen($this->host, $port);
                 $socket = @socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-                $connection = @socket_connect($socket, $this->host, $port);
+                $connection = @socket_connect($socket, $this->host, $port["port"]);
                 if ($connection) {
-                    $list[$this->host][$port] = true;
+                   $status = true;
                     @socket_close($socket);
                 } else {
-                    $list[$this->host][$port] = false;
+                    $status = false;
                 }
             } catch (Exception $e) {
-                $list[$this->host][$port] = false;
+                $status = false;
+            } finally {
+                array_push($results, array(
+                    "port" => $port["port"],
+                    "status" => $status,
+                    "monitorId" => $port["monitorId"]
+                ));
             }
         }
 
-        return $list;
+        return $results;
     }
 }

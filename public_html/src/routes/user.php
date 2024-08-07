@@ -22,6 +22,7 @@
 
         //Set the session
         $_SESSION['loggedin'] = true;
+        $_SESSION['userid'] = $userExists[0]->id;
 
         return $response(["httpCode" => HTTP_OK, "action" => "redirect", "url" => "/portal/dashboard"]);
     }
@@ -93,20 +94,5 @@
             //return needed 
             return (object)["httpCode" => HTTP_OK, "message" => "User Deleted"];
         break;
-        case "login":
-            $user = new User();
-            $user->username = $request->data->username;
-            $user->password = $request->data->password;
-
-            $userExists = $user->select("id")
-                ->where("username = '{$user->username}'")
-                ->and("password = '{$user->password}'")
-                ->asObject();
-
-            if (empty($userExists)) {
-                return (object)["httpCode" => HTTP_BAD_REQUEST, "message" => "Invalid username or password or user does not exist"];
-            }
-
-            return $userExists;
     }
 });

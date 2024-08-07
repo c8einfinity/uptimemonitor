@@ -1,0 +1,2 @@
+ALTER TABLE server_monitor
+ADD COLUMN interval INTEGER DEFAULT 5 NOT NULL;

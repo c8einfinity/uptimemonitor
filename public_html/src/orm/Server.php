@@ -11,6 +11,7 @@ class Server extends \Tina4\ORM
 	public $id;
 	public $tenantId;
 	public $serverName;
+	public $ipAddress;
 	public $serverDescription;
 	public $active;
 	public $createdAt;

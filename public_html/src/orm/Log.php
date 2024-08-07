@@ -10,6 +10,7 @@ class Log extends \Tina4\ORM
     
 	public $id;
 	public $serverId;
+    public $serverMonitorId;
 	public $createdAt;
 	public $monitorType;
 	public $statusCode;

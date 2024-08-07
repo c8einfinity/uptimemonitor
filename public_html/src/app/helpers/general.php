@@ -46,3 +46,4 @@ function checkRequiredFields($request, $requiredFields) {
 
     return (object)["httpCode" => HTTP_OK];
 }
+

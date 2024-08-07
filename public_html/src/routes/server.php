@@ -22,6 +22,7 @@
             //Get the tenants (workspaces) to populate the select box
             $tenant = new Tenant();
             $tenants = $tenant->select("id, tenant_name")
+                ->where("id in (select tenant_id from user_tenant where user_id = {$_SESSION['userid']})")
                 ->orderBy("tenant_name")
                 ->asArray();
 
@@ -60,6 +61,9 @@
             break;
         case "create":
             $result = checkRequiredFields($request, $server->requiredFields);
+
+            //Set to active by default
+            $server->active = 1;
 
             if ($result->httpCode != HTTP_OK)
             {

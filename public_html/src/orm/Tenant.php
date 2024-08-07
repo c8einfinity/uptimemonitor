@@ -10,6 +10,7 @@ class Tenant extends \Tina4\ORM
     
 	public $id;
 	public $tenantName;
+    public $userId;
 	public $createdAt;
 	public $updatedAt;
 
@@ -17,5 +18,5 @@ class Tenant extends \Tina4\ORM
         "tenantName"
     );
 
-    public $virtualFields = ["requiredFields"];
+    public $virtualFields = ["requiredFields", "userId"];
 }

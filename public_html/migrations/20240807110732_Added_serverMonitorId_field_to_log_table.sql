@@ -1,0 +1,2 @@
+ALTER TABLE log
+ADD COLUMN server_monitor_id INTEGER DEFAULT 0 NOT NULL;

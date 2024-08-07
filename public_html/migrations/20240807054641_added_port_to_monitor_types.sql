@@ -1,0 +1,1 @@
+insert or replace into monitor_type (id, monitor_type) values (5, 'Port');
