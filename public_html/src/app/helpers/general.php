@@ -47,3 +47,60 @@ function checkRequiredFields($request, $requiredFields) {
     return (object)["httpCode" => HTTP_OK];
 }
 
+/**
+ * Where filter for tenants to ensure we only get data for the user and tenant
+ */
+function getWhereFilter($filter, $field = 'id') {
+    if (!empty($filter)) {
+        $filter .= " AND ({$field} in (select tenant_id from user_tenant where user_id = {$_SESSION['userid']}))";
+    }
+    else {
+        $filter = "{$field} in (select tenant_id from user_tenant where user_id = {$_SESSION['userid']})";
+    }
+
+    return $filter;
+}
+
+/**
+ * Get the tenants linked to a specific user
+ */
+function getUserTenants() {
+    $usertenant = new UserTenant();
+
+    $usertenants = $usertenant->select("tenant_id")
+        ->where("user_id = ?", [$_SESSION["userid"]])
+        ->asArray();
+
+    //Only return the tenant_ids
+    return array_column($usertenants, "tenant_id");
+}
+
+/**
+ * Get the servers for a user
+ */
+function getUserServersFilter($filter) {
+    $tenants = getUserTenants();
+
+    if (!empty($tenants)) {
+        $server = new Server();
+
+        $servers = $server->select("id")
+            ->where("tenant_id in (?)", implode(",", $tenants))
+            ->asArray();
+
+        $servers = array_column($servers, "id");
+
+        if (!empty($servers))
+            $str = "server_id in {implode(',', $servers)}";
+        else $str = "server_id = -1"; //Ensure we return no records
+    
+        if (!empty($filter))
+            $filter .= ' and '.$str;
+        else $filter = $str;
+
+        return $filter;
+    }
+    else return "server_id = -1";
+}
+
+

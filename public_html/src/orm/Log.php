@@ -10,9 +10,11 @@ class Log extends \Tina4\ORM
     
 	public $id;
 	public $serverId;
+    public $serverName;
     public $serverMonitorId;
 	public $createdAt;
 	public $monitorType;
+    public $monitorName; //TODO: Change back to monitorType once monitorType is changed to monitorTypeId
 	public $statusCode;
 	public $rawResult;
 
@@ -22,5 +24,5 @@ class Log extends \Tina4\ORM
         "rawResult"
     );
 
-    public $virtualFields = ["requiredFields"];
+    public $virtualFields = ["requiredFields", "serverName", "monitorName"];
 }

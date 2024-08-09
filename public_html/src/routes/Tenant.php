@@ -14,12 +14,9 @@
  */
 \Tina4\Crud::route ("/api/tenants", new Tenant(), function ($action, Tenant $tenant, $filter, \Tina4\Request $request) {
     //Filter everthing based on a user - there is a user -> tenant (workspace) relationship
-    if (!empty($filter['where'])) {
-        $filter['where'] .= " AND (id in (select tenant_id from user_tenant where user_id = {$_SESSION['userid']}))";
-    }
-    else {
-        $filter['where'] = "id in (select tenant_id from user_tenant where user_id = {$_SESSION['userid']})";
-    }
+    if (!empty($filter['where']))
+        $filter['where'] = getWhereFilter($filter['where']);
+    else $filter['where'] = getWhereFilter("");
     
     switch ($action) {
        case "form":
@@ -45,7 +42,7 @@
                 $where = "{$filter["where"]}";
             }
 
-            return   $tenant->select ("*", $filter["length"], $filter["start"])
+            return $tenant->select ("*", $filter["length"], $filter["start"])
                 ->where("{$where}")
                 ->orderBy($filter["orderBy"])
                 ->asResult();

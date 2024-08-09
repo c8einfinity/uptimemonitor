@@ -1,0 +1,22 @@
+MIME-Version: 1.0
+From:Uptime Monitor<no-reply@uptimemonitor.ai>
+Reply-To:no-reply@uptimemonitor.ai
+Content-Type: multipart/related; boundary=3476a5bac20cec2e0d6a0fe2d60cceab
+--3476a5bac20cec2e0d6a0fe2d60cceab
+Content-Type: multipart/alternative; boundary=3a329b68cdd3faff5a705014888cc4ab
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Uptime Monitor</title>
+</head>
+<body>
+    <h1>Hi </h1>
+    <p>Welcome to Uptime Monitor. You have been successfully registered. Please see your login details below:</p>
+    <p><b>Username: </b></p>
+    <p><b>Password: </b></p>
+
+    <p>Enjoy!!</p>
+</body>
+</html>

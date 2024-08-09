@@ -13,6 +13,11 @@
  * @tags servermonitors
  */
 \Tina4\Crud::route ("/api/servermonitors", new ServerMonitor(), function ($action, ServerMonitor $serverMonitor, $filter, \Tina4\Request $request) {
+    //Get the servers for a user
+    /*if (!empty($filter['where']))
+        $filter['where'] = getUserServersFilter($filter['where']);
+    else $filter['where'] = getUserServersFilter("");*/ //TODO: Fix this filter
+
     switch ($action) {
        case "form":
        case "fetch":

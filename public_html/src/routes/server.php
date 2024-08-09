@@ -13,6 +13,11 @@
  * @tags Servers
  */
 \Tina4\Crud::route ("/api/servers", new Server, function ($action, Server $server, $filter, \Tina4\Request $request) {
+    //Filter everthing based on a user - there is a user -> tenant (workspace) relationship
+    if (!empty($filter['where']))
+        $filter['where'] = getWhereFilter($filter['where'], "tenant_id");
+    else $filter['where'] = getWhereFilter("", "tenant_id");
+    
     switch ($action) {
        case "form":
        case "fetch":

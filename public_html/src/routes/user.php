@@ -83,6 +83,21 @@
                 exit(json_encode($result)); //Terminate the script
         break;
         case "afterCreate":
+            //If a new user is created then send a welcome email
+            $mail = new \helpers\MessengerHelper();
+
+            //TODO: Add Name field to form as well
+            $toAddress = ["name" => $request->data->email, "email" => $request->data->email];
+
+            $data = array(
+                "username" => $request->data->username,
+                "password" => $request->data->password 
+            );
+
+            //Populate the message
+            $message = \Tina4\renderTemplate("/mail/welcome.twig", ["data" => $data]);
+
+            $mail->sendMail($toAddress, "Welcome to Uptime Monitor", $message);
         case "afterUpdate":
             return $user->asObject();
         break;

@@ -44,7 +44,7 @@ class TenantService {
                 $monitorType = 5;
                 $statusCode = $result['status'] ? HTTP_OK : HTTP_FORBIDDEN;
 
-                if (!LogService::logResponse($server->id, $result["monitorId"], $monitorType, $statusCode, $result)) {
+                if (!LogService::logResponse($server["id"], $result["monitorId"], $monitorType, $statusCode, $result)) {
                     \Tina4\Debug::message("Failed to log response. See previous debug message.");
                 }
                 else {
