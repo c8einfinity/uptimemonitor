@@ -10,6 +10,7 @@ class User extends \Tina4\ORM
     
 	public $id;
 	public $username;
+    public $fullName;
 	public $password;
 	public $email;
 	public $createdAt;

@@ -21,8 +21,7 @@ class Server extends \Tina4\ORM
 	public $requiredFields = array(
 		"tenantId",
 		"serverName",
-		"serverDescription",
-		"active"
+		"serverDescription"
 	);
 
 	public $virtualFields = ["requiredFields", "tenantName"];

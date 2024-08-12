@@ -11,9 +11,9 @@ $config = new \Tina4\Config(static function (\Tina4\Config $config){
 /*$helper = new helpers\PortTester("127.0.0.1", [7150, 80, 54564]);
 print_r ($helper->check());*/
 
-/*$tenantService = new services\TenantService(4);
+/*$tenantService = new services\TenantService(10);
 
-print_r($tenantService->testMonitors());*/
+$tenantService->testMonitors();*/
 
 /*$email = new \helpers\MessengerHelper();
 

@@ -91,7 +91,8 @@
 
             $data = array(
                 "username" => $request->data->username,
-                "password" => $request->data->password 
+                "password" => $request->data->password,
+                "fullname" => $request->data->fullname
             );
 
             //Populate the message

@@ -30,8 +30,7 @@ class ServerMonitor extends \Tina4\ORM
 	public $requiredFields = array(
 		"serverId",
 		"monitorTypeId",
-		"port",
-		"active"
+		"port"
 	);
 
 	public $virtualFields = ["requiredFields", "serverName", "monitorType"];

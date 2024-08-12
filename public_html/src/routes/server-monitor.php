@@ -14,9 +14,9 @@
  */
 \Tina4\Crud::route ("/api/servermonitors", new ServerMonitor(), function ($action, ServerMonitor $serverMonitor, $filter, \Tina4\Request $request) {
     //Get the servers for a user
-    /*if (!empty($filter['where']))
+    if (!empty($filter['where']))
         $filter['where'] = getUserServersFilter($filter['where']);
-    else $filter['where'] = getUserServersFilter("");*/ //TODO: Fix this filter
+    else $filter['where'] = getUserServersFilter("");
 
     switch ($action) {
        case "form":
@@ -24,8 +24,11 @@
             //Return back a form to be submitted to the create
 
             //Get the servers
+            $filter = str_replace('server_id', 'id', $filter); //Bit of a hack - Want to use the same query but the server_id is actually the id in the server table
+
             $server = new Server();
             $servers = $server->select("id, server_name")
+                ->where($filter['where'])
                 ->orderBy("server_name")
                 ->asArray();
 
@@ -79,18 +82,21 @@
                 //If we are using the API
                 if (empty($request->data->formToken))
                     exit(json_encode($result)); //Terminate the script
-                else return (object)["httpCode" => HTTP_BAD_REQUEST, "message" => "<script>showMessage(\''.$result->message.'\');</script>"];
+                else exit("<script>showMessage('{$result->message}');</script>");
+            } 
+            else {
+                //Set the active field
+                $serverMonitor->active = 1;
+                if (empty($serverMonitor->interval)) 
+                    $serverMonitor->interval = 5;
             }
         break;
         case "afterCreate":
         case "afterUpdate":
             //If we are using the forms
             if (!empty($request->data->formToken))
-                return (object)["httpCode" => HTTP_OK, "message" => "<script>serverGrid.ajax.reload((null, false));</script>"];
+                return (object)["httpCode" => HTTP_OK, "message" => "<script>serverMonitorGrid.ajax.reload((null, false));</script>"];
             else return $serverMonitor->asObject();
-
-
-            return $serverMonitor->asObject();
         break;
         case "delete":
             if (empty($request->inlineParams[0]))
@@ -98,7 +104,9 @@
         break;
         case "afterDelete":
             //return needed 
-            return (object)["httpCode" => HTTP_OK, "message" => "ServerMonitor Deleted"];
+            if (!empty($request->data->formToken))
+                return (object)["httpCode" => HTTP_OK, "message" => "<script>serverMonitorGrid.ajax.reload((null, false));</script>"];
+            else return (object)["httpCode" => HTTP_OK, "message" => "ServerMonitor Deleted"];
         break;
     }
 });

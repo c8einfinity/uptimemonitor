@@ -84,14 +84,19 @@ function getUserServersFilter($filter) {
     if (!empty($tenants)) {
         $server = new Server();
 
+        $tenant_list = implode(',', $tenants);
+
         $servers = $server->select("id")
-            ->where("tenant_id in (?)", implode(",", $tenants))
+            ->where("tenant_id in ({$tenant_list})")
             ->asArray();
 
-        $servers = array_column($servers, "id");
+        if (!empty($servers)) {
+            $servers = array_column($servers, "id");
 
-        if (!empty($servers))
-            $str = "server_id in {implode(',', $servers)}";
+            $server_list = implode(',', $servers);
+
+            $str = "server_id in ({$server_list})";
+        }
         else $str = "server_id = -1"; //Ensure we return no records
     
         if (!empty($filter))

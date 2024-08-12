@@ -11,7 +11,7 @@ public_html/vendor/
 public_html/bin/
 
 public_html/log/
-public_html/messenger/
+public_html/messenger/spool/
 
 #sqlite database
 database/

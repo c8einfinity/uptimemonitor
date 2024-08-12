@@ -13,13 +13,14 @@
                             <div class="alert alert-danger">{{ error }}</div>
                         {% endif %}
                         <form id="loginForm">
+                           
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username:</label>
-                                <input type="text" id="username" name="username" class="form-control" value="{{ last_username }}" required>
+                                <input type="text" id="username" name="username" class="form-control" value="{{ last_username }}" placeholder="Username" required>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password:</label>
-                                <input type="password" id="password" name="password" class="form-control" required>
+                                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
                             </div>
                             {{ "loginForm" | formToken | raw }}
                             <a href="#" onClick="javascript:loginUser();" class="btn btn-primary w-100">Login</a>

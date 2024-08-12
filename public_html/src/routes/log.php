@@ -14,11 +14,9 @@
  */
 \Tina4\Crud::route ("/api/logs", new Log(), function ($action, Log $log, $filter, \Tina4\Request $request) {
      //Get the servers for a user
-    $servers = getUserServersFilter();
-
     if (!empty($filter['where']))
-        $filter['where'] .= ' and '.getUserServersFilter();
-    else $filter['where'] = getUserServersFilter();
+        $filter['where'] = getUserServersFilter($filter['where']);
+    else $filter['where'] = getUserServersFilter("");
 
     switch ($action) {
        case "form":
