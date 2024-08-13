@@ -1,71 +1,35 @@
 <form id="notificationForm" enctype="multipart/form-data" xmlns="http://www.w3.org/1999/html">
     <div class="row">
-                    <div class="form-group col-md-6">
-                <label for="batchSize">Batch Size</label>
-                <input class="form-control" type="text" id="batchSize"
-                       name="batchSize" placeholder="Batch Size"
-                       value="{{ data.batchSize }}">
+        <div class="form-group col-md-6">
+            <label for="serverId">Server</label>
+            <select class="form-control" id="serverId" name="serverId" required>
+                <option value="">-- select server --</option>
+                {% for server in servers %}
+                    <option value="{{ server.id }}" {{ data.serverId == server.id ? 'selected' : '' }}>{{ server.serverName }}</option>
+                {% endfor %}
+
+            </select>
+        </div>
+        <div class="form-group col-md-6">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="emailAlert" name="emailAlert" value="1" {{ data.emailAlert ? 'checked' : '' }}>
+                <label class="form-check-label" for="emailAlert">Email Alert</label>
             </div>
-                    <div class="form-group col-md-6">
-                <label for="batchCount">Batch Count</label>
-                <input class="form-control" type="text" id="batchCount"
-                       name="batchCount" placeholder="Batch Count"
-                       value="{{ data.batchCount }}">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="emailAddress">Email Address</label>
+            <input class="form-control" type="text" id="emailAddress" name="emailAddress" placeholder="Email Address" value="{{ data.emailAddress }}">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="threshold">Threshold</label>
+            <input class="form-control" type="text" id="threshold" name="threshold" placeholder="Threshold" value="{{ data.threshold }}">
+        </div>
+        <div class="form-group col-md-6">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="active" name="active" value="1" {{ data.active ? 'checked' : '' }}>
+                <label class="form-check-label" for="emailAlert">Active</label>
             </div>
-                    <div class="form-group col-md-6">
-                <label for="batchStarted">Batch Started</label>
-                <input class="form-control" type="text" id="batchStarted"
-                       name="batchStarted" placeholder="Batch Started"
-                       value="{{ data.batchStarted }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="id">Id</label>
-                <input class="form-control" type="text" id="id"
-                       name="id" placeholder="Id"
-                       value="{{ data.id }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="serverId">Server Id</label>
-                <input class="form-control" type="text" id="serverId"
-                       name="serverId" placeholder="Server Id"
-                       value="{{ data.serverId }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="emailAlert">Email Alert</label>
-                <input class="form-control" type="text" id="emailAlert"
-                       name="emailAlert" placeholder="Email Alert"
-                       value="{{ data.emailAlert }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="emailAddress">Email Address</label>
-                <input class="form-control" type="text" id="emailAddress"
-                       name="emailAddress" placeholder="Email Address"
-                       value="{{ data.emailAddress }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="threshold">Threshold</label>
-                <input class="form-control" type="text" id="threshold"
-                       name="threshold" placeholder="Threshold"
-                       value="{{ data.threshold }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="active">Active</label>
-                <input class="form-control" type="text" id="active"
-                       name="active" placeholder="Active"
-                       value="{{ data.active }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="createdAt">Created At</label>
-                <input class="form-control" type="text" id="createdAt"
-                       name="createdAt" placeholder="Created At"
-                       value="{{ data.createdAt }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="updatedAt">Updated At</label>
-                <input class="form-control" type="text" id="updatedAt"
-                       name="updatedAt" placeholder="Updated At"
-                       value="{{ data.updatedAt }}">
-            </div>
-            </div>
+        </div>
+    </div>
     {{"notificationForm" | formToken | raw }}
 </form>

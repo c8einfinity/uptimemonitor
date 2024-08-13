@@ -14,10 +14,12 @@ class TenantService {
     }
 
     /**
-     * Test all the monitors for a tenant
+     * Test all the monitors for a tenant or server
      */
-    public function testMonitors() {
-        $servers = $this->getServers();
+    public function testMonitors($serverId = 0) {
+        if ($serverId > 0)
+            $servers = $this->getServers($serverId);
+        else $servers = $this->getServers();
 
         /**
          * Iterate through all the servers and get the monitors
@@ -57,8 +59,11 @@ class TenantService {
     /**
      * Get all servers for a tenant
      */
-    private function getServers() {
+    private function getServers($serverId = 0) {
         $server = new \Server();
+
+        //TODO: Filter on server as well
+
         return $server->select("id, server_name, ip_address")
             ->where("tenant_id = ?", [$this->tenantId])
             ->asArray();
@@ -70,7 +75,7 @@ class TenantService {
     private function getSocketMonitors(int $serverId) {
         $serverMonitor = new \ServerMonitor();
         return $serverMonitor->select("id, monitor_type_id, port")
-            ->where("server_id = ? and monitor_type_id = 5", [$serverId])
+            ->where("server_id = ? and monitor_type_id = 5", [$serverId]) //TODO: Add MonitorType to Constants
             ->asArray();
     }
 

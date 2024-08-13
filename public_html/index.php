@@ -23,5 +23,9 @@ $email->sendMail(["name" => "Philip", "email" => "philip.malan@gmail.com"], "Tes
 
 //echo $_SESSION['userid'];
 
+//$monitoringService = new services\MonitoringService();
+
+//$monitoringService->testTenants();
+
 echo new \Tina4\Tina4Php($config);
 

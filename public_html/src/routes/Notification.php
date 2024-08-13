@@ -13,19 +13,32 @@
  * @tags Notifications
  */
 \Tina4\Crud::route ("/api/notifications", new Notification(), function ($action, Notification $notification, $filter, \Tina4\Request $request) {
+    //Get the servers for a user
+    if (!empty($filter['where']))
+        $filter['where'] = getUserServersFilter($filter['where']);
+    else $filter['where'] = getUserServersFilter("");
+    
     switch ($action) {
        case "form":
        case "fetch":
             //Return back a form to be submitted to the create
+            //Get the servers
+            $filter = str_replace('server_id', 'id', $filter); //Bit of a hack - Want to use the same query but the server_id is actually the id in the server table
+
+            $server = new Server();
+            $servers = $server->select("id, server_name")
+                ->where($filter['where'])
+                ->orderBy("server_name")
+                ->asArray();
              
             if ($action == "form") {
                 $title = "Add Notification";
                 $savePath =  TINA4_SUB_FOLDER . "/api/notifications";
-                $content = \Tina4\renderTemplate("/api/notifications/form.twig", []);
+                $content = \Tina4\renderTemplate("/api/notifications/form.twig", ["servers" => $servers]);
             } else {
                 $title = "Edit Notification";
                 $savePath =  TINA4_SUB_FOLDER . "/api/notifications/".$notification->id;
-                $content = \Tina4\renderTemplate("/api/notifications/form.twig", ["data" => $notification]);
+                $content = \Tina4\renderTemplate("/api/notifications/form.twig", ["data" => $notification, "servers" => $servers]);
             }
 
             return \Tina4\renderTemplate("components/modalForm.twig", ["title" => $title, "onclick" => "if ( $('#notificationForm').valid() ) { saveForm('notificationForm', '" .$savePath."', 'message'); $('#formModal').modal('hide');}", "content" => $content]);
@@ -40,6 +53,10 @@
             return   $notification->select ("*", $filter["length"], $filter["start"])
                 ->where("{$where}")
                 ->orderBy($filter["orderBy"])
+                ->filter(static function(Notification $data) {
+                    $server = (new Server())->load("id = ?", [$data->serverId])->asObject();
+                    $data->serverName = $server->serverName;
+                })
                 ->asResult();
         break;
         case "create":
