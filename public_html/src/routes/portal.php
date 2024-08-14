@@ -22,7 +22,7 @@
         $filter = array(
             "length" => 10,
             "start" => 0,
-            "orderBy" => "created_at desc",
+            "orderBy" => "server_id desc",
             "where" => ""
         );
 

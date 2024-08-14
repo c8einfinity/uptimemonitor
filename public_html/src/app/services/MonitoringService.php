@@ -12,7 +12,6 @@ class MonitoringService {
 
     /**
      * @description Test all servers based on a tenant. The idea is that multiple threads can then run for each workspace
-     * @tags monitorings
      */
     public function testTenants($tenantid = 0) {
         //Get all the tenants
@@ -28,6 +27,9 @@ class MonitoringService {
         }
     }
 
+    /**
+     * @description Test all monitors for a single server
+     */
     public function testServer($serverId) {
         $serverMonitor = new \ServerMonitor();
         $serverMonitor->select("server_id = ?", $serverId)->asObject();
