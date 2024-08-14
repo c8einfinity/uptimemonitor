@@ -22,7 +22,7 @@
             <div class="position-sticky pt-3 sidebar-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#" onClick="javascript:loadPage('/portal/summary', 'content');">
+                        <a class="nav-link" aria-current="page" href="#" onClick="javascript:loadPage('/portal/summary', 'content');">
                             Dashboard
                         </a>
                     </li>
@@ -46,7 +46,7 @@
                             Notifications
                         </a>
                     </li><li class="nav-item">
-                        <a class="nav-link" href="#" onClick="javascript:loadPage('/api/incidents/landing', 'content');">
+                        <a class="nav-link" href="#">
                             Incidents
                         </a>
                     </li>
@@ -90,7 +90,7 @@
         }
 
         function refreshDash() {
-            alert('Done');
+            window.location.reload();
         }
     </script>
 

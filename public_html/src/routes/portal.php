@@ -16,11 +16,23 @@
     });
 
     \Tina4\Get::add("/portal/summary", function (\Tina4\Response $response) {
-        return $response (\Tina4\renderTemplate("/portal/summary.twig"), HTTP_OK, TEXT_HTML);
+        //Get all the monitors for a user - refer to database.php in helpers
+
+        //TODO: Optimise this filter for paging etc and get it from the caller page
+        $filter = array(
+            "length" => 10,
+            "start" => 0,
+            "orderBy" => "created_at desc",
+            "where" => ""
+        );
+
+        $serverMonitors = getServerMonitors($filter);
+        
+        return $response (\Tina4\renderTemplate("/portal/summary.twig", ["servermonitors" => $serverMonitors]), HTTP_OK, TEXT_HTML);
     });
 
-    \Tina4\Post::add('/portal/checkmonitors', function (\Tina4\Request $request, \Tina4\Response $response) {
-        switch ($request['action']) {
+    \Tina4\Post::add('/portal/checkmonitors', function(\Tina4\Response $response, \Tina4\Request $request) {
+        switch ($request->data->action) {
             case 'single': //Check a single monitor
                 break;
             default: //Check all monitors

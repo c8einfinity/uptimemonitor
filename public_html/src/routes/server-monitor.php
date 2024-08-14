@@ -14,17 +14,21 @@
  */
 \Tina4\Crud::route ("/api/servermonitors", new ServerMonitor(), function ($action, ServerMonitor $serverMonitor, $filter, \Tina4\Request $request) {
     //Get the servers for a user
-    if (!empty($filter['where']))
+    /*if (!empty($filter['where']))
         $filter['where'] = getUserServersFilter($filter['where']);
-    else $filter['where'] = getUserServersFilter("");
+    else $filter['where'] = getUserServersFilter("");*/
 
     switch ($action) {
        case "form":
        case "fetch":
             //Return back a form to be submitted to the create
 
+            if (!empty($filter['where'])) //TODO: Move this to the database.php helper
+                $filter['where'] = getUserServersFilter($filter['where']);
+            else $filter['where'] = getUserServersFilter("");
+
             //Get the servers
-            $filter = str_replace('server_id', 'id', $filter); //Bit of a hack - Want to use the same query but the server_id is actually the id in the server table
+            $filter['where'] = str_replace('server_id', 'id', $filter['where']); //Bit of a hack - Want to use the same query but the server_id is actually the id in the server table
 
             $server = new Server();
             $servers = $server->select("id, server_name")
@@ -53,23 +57,9 @@
        break;
        case "read":
             //Return a dataset to be consumed by the grid with a filter
-            $where = "";
-            if (!empty($filter["where"])) {
-                $where = "{$filter["where"]}";
-            }
 
-            return $serverMonitor->select ("*", $filter["length"], $filter["start"])
-                ->where("{$where}")
-                ->orderBy($filter["orderBy"])
-                ->filter(static function(ServerMonitor $data) {
-                    $server = (new Server())->load("id = ?", [$data->serverId])->asObject();
-                    $data->serverName = $server->serverName;
-                })
-                ->filter(static function(ServerMonitor $data) {
-                    $monitorType = (new MonitorType())->load("id = ?", [$data->monitorTypeId])->asObject();
-                    $data->monitorType = $monitorType->monitorType;
-                })
-                ->asResult();
+            //Moved it to the database.php file under helpers
+            return getServerMonitors($filter);
         break;
         case "update":
             $serverMonitor->updatedAt = date("Y-m-d H:i:s");

@@ -26,7 +26,9 @@ class PortTester
                 $status = false;
                 
                 //$connection = @fsockopen($this->host, $port);
-                $socket = @socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+                $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+                //socket_set_timeout($socket, 5, 0); //5 seconds timeout - Should be added to env file
+
                 $connection = @socket_connect($socket, $this->host, $port["port"]);
                 if ($connection) {
                    $status = true;
@@ -34,7 +36,7 @@ class PortTester
                 } else {
                     $status = false;
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $status = false;
             } finally {
                 array_push($results, array(

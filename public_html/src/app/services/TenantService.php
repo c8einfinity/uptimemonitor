@@ -50,22 +50,40 @@ class TenantService {
                     \Tina4\Debug::message("Failed to log response. See previous debug message.");
                 }
                 else {
-                    //TODO: Add The last result to the server monitor table for quick reference
+                    $serverMonitor = (new \ServerMonitor());
+                    if ($serverMonitor->load("id = ?", [$result["monitorId"]])) {
+                        $serverMonitor->lastRun = date("Y-m-d H:i:s");
+                        $serverMonitor->lastResult = $statusCode;
+                        $serverMonitor->lastStatusCode = $statusCode;
+                        $serverMonitor->lastRunRawResult = json_encode($result);
+                        $serverMonitor->save();
+                    }
+
+                    //Send to Slack - TODO: Read from config and see if we need to send to Slack
+                    if ($statusCode != HTTP_OK) {
+                        $slackMessage = "SERVER ERROR: Server: {$server["serverName"]} IP: {$server["ipAddress"]} {Port: {$result["port"]} Status: {$statusCode}";
+                        $slackHelper = new \helpers\SlackHelper();
+                        $slackHelper->postMessage($slackMessage);
+                    }
                 }
             }
         }
     }
 
     /**
-     * Get all servers for a tenant
+     * Get all servers or a single server for a tenant
      */
     private function getServers($serverId = 0) {
         $server = new \Server();
 
         //TODO: Filter on server as well
+        $where = "tenant_id = {$this->tenantId}";
+
+        //If we are only updating one server
+        $where = $serverId > 0 ? $where . " and id = {$serverId}" : $where;
 
         return $server->select("id, server_name, ip_address")
-            ->where("tenant_id = ?", [$this->tenantId])
+            ->where($where)
             ->asArray();
     }
 
