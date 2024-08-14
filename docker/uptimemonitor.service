@@ -1,0 +1,19 @@
+[Unit]
+Description=Uptime Monitor Service
+After=syslog.target
+After=network.target
+
+[Service]
+WorkingDirectory=/home/uptimemonitor/public_html
+ExecStart=php /home/uptimemonitor/public_html/bin/tina4service
+User=uptimemonitor
+Type=simple
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=uptimemonitor
+SuccessExitStatus=143
+TimeoutStopSec=120
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
