@@ -9,7 +9,7 @@
     </button>
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a class="nav-link" href="#">Sign out</a>
+            <a class="nav-link" href="#" onClick="javascript:logOut();">Sign out</a>
         </li>
     </ul>
 </nav>
@@ -41,7 +41,7 @@
                             Monitors
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <!--<li class="nav-item">
                         <a class="nav-link" href="#" onClick="javascript:loadPage('/api/notifications/landing', 'content');">
                             Notifications
                         </a>
@@ -49,13 +49,13 @@
                         <a class="nav-link" href="#">
                             Incidents
                         </a>
-                    </li>
+                    </li>-->
                     <li class="nav-item">
                         <a class="nav-link" href="#" onClick="javascript:loadPage('/api/logs/landing', 'content');">
                             Logs
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <!--<li class="nav-item">
                         <a class="nav-link" href="#">
                             Preferences
                         </a>
@@ -70,7 +70,7 @@
                             <span data-feather="bar-chart-2"></span>
                             Reports
                         </a>
-                    </li>
+                    </li>-->
                 </ul>
             </div>
         </nav>
@@ -92,6 +92,16 @@
         function refreshDash() {
             window.location.reload();
         }
+
+        function logOut() {
+            sendRequest("/api/users/logout", '', "POST", redirectToLogin);
+        }
+
+        function redirectToLogin() {
+            window.location.href = '/';
+        }
+
+
     </script>
 
 {% endblock %}

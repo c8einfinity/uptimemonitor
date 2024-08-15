@@ -16,6 +16,7 @@ class LogService {
         $log->monitorType = $monitorType;
         $log->serverMonitorId = $serverMonitorId;
         $log->statusCode = $statusCode;
+        
         $log->rawResult = $rawResult;
 
         if ($log->save())

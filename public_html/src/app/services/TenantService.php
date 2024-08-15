@@ -31,6 +31,11 @@ class TenantService {
            $ports = array();
 
             foreach ($socketMonitors as $socketMonitor) {
+                //See if we need to run it
+                if ($socketMonitor["nextRun"] > date("Y-m-d H:i:s") && !empty($socketMonitor["nextRun"])) {
+                    continue;
+                }
+                
                 array_push($ports, array(
                     "monitorId" => $socketMonitor["id"],
                     "port" => $socketMonitor["port"]
@@ -53,15 +58,25 @@ class TenantService {
                     $serverMonitor = (new \ServerMonitor());
                     if ($serverMonitor->load("id = ?", [$result["monitorId"]])) {
                         $serverMonitor->lastRun = date("Y-m-d H:i:s");
+                        
+                        //Work out the next run
+                        $serverMonitor->nextRun = date("Y-m-d H:i:s", strtotime($serverMonitor->lastRun . " + {$serverMonitor->interval} minutes"));
+
+                        if ($statusCode == HTTP_OK) {
+                            $status = "Online";
+                        } else {
+                            $status = "Error";
+                        }
                         $serverMonitor->lastResult = $statusCode;
                         $serverMonitor->lastStatusCode = $statusCode;
+                        $serverMonitor->status = $status;
                         $serverMonitor->lastRunRawResult = json_encode($result);
                         $serverMonitor->save();
                     }
 
                     //Send to Slack - TODO: Read from config and see if we need to send to Slack
                     if ($statusCode != HTTP_OK) {
-                        $slackMessage = "SERVER ERROR: Server: {$server["serverName"]} IP: {$server["ipAddress"]} {Port: {$result["port"]} Status: {$statusCode}";
+                        $slackMessage = "SERVER ERROR: Server: {$server["serverName"]} IP: {$server["ipAddress"]} Port: {$result["port"]} Status: {$statusCode}";
                         $slackHelper = new \helpers\SlackHelper();
                         $slackHelper->postMessage($slackMessage);
                     }
@@ -92,8 +107,8 @@ class TenantService {
      */
     private function getSocketMonitors(int $serverId) {
         $serverMonitor = new \ServerMonitor();
-        return $serverMonitor->select("id, monitor_type_id, port")
-            ->where("server_id = ? and monitor_type_id = 5", [$serverId]) //TODO: Add MonitorType to Constants
+        return $serverMonitor->select("id, monitor_type_id, port, next_run")
+            ->where("server_id = ? and monitor_type_id = 5 and active = 1", [$serverId]) //TODO: Add MonitorType to Constants
             ->asArray();
     }
 

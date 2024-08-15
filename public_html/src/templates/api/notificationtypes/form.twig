@@ -1,0 +1,23 @@
+<form id="notificationTypeForm" enctype="multipart/form-data" xmlns="http://www.w3.org/1999/html">
+    <div class="row">
+                    <div class="form-group col-md-6">
+                <label for="id">Id</label>
+                <input class="form-control" type="text" id="id"
+                       name="id" placeholder="Id"
+                       value="{{ data.id }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="notificationType">Notification Type</label>
+                <input class="form-control" type="text" id="notificationType"
+                       name="notificationType" placeholder="Notification Type"
+                       value="{{ data.notificationType }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="requiredFields">Required Fields</label>
+                <input class="form-control" type="text" id="requiredFields"
+                       name="requiredFields" placeholder="Required Fields"
+                       value="{{ data.requiredFields }}">
+            </div>
+            </div>
+    {{"notificationTypeForm" | formToken | raw }}
+</form>

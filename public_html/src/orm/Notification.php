@@ -10,8 +10,11 @@ class Notification extends \Tina4\ORM
     
 	public $id;
 	public $serverId;
+	public $tenantId;
+	public $notificationTypeId;
 	public $emailAlert;
 	public $emailAddress;
+	public $slackUrl;
 	public $threshold;
 	public $active;
 	public $createdAt;

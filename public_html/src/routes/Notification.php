@@ -30,15 +30,21 @@
                 ->where($filter['where'])
                 ->orderBy("server_name")
                 ->asArray();
+
+            //Get the notification types
+            $notificationType = new NotificationType();
+            $notificationTypes = $notificationType->select("id, notification_type")
+                ->orderBy("monitor_type")
+                ->asArray();
              
             if ($action == "form") {
                 $title = "Add Notification";
                 $savePath =  TINA4_SUB_FOLDER . "/api/notifications";
-                $content = \Tina4\renderTemplate("/api/notifications/form.twig", ["servers" => $servers]);
+                $content = \Tina4\renderTemplate("/api/notifications/form.twig", ["servers" => $servers, "notificationtypes" => $notificationTypes]);
             } else {
                 $title = "Edit Notification";
                 $savePath =  TINA4_SUB_FOLDER . "/api/notifications/".$notification->id;
-                $content = \Tina4\renderTemplate("/api/notifications/form.twig", ["data" => $notification, "servers" => $servers]);
+                $content = \Tina4\renderTemplate("/api/notifications/form.twig", ["data" => $notification, "servers" => $servers, "notificationtypes" => $notificationTypes]);
             }
 
             return \Tina4\renderTemplate("components/modalForm.twig", ["title" => $title, "onclick" => "if ( $('#notificationForm').valid() ) { saveForm('notificationForm', '" .$savePath."', 'message'); $('#formModal').modal('hide');}", "content" => $content]);
@@ -57,6 +63,14 @@
                     $server = (new Server())->load("id = ?", [$data->serverId])->asObject();
                     $data->serverName = $server->serverName;
                 })
+                /*->filter(static function(Notification $data) {
+                    $notificationType = (new NotificationType())->load("id = ?", [$data->notificationTypeId])->asObject();
+                    $data->notificationType = $notificationType->notificationType;
+                })*/ //TODO: Fix this query
+                /*->filter(static function(Notification $data) {
+                    $tenant = (new Tenant())->load("id = ?", [$data->tenantId])->asObject();
+                    $data->tenantName = $tenant->tenantName;
+                })*/ //TODO: Fix this query
                 ->asResult();
         break;
         case "create":

@@ -4,6 +4,12 @@
     return $response (\Tina4\renderTemplate("/api/users/grid.twig"), HTTP_OK, TEXT_HTML);
 });
 
+\Tina4\Get::add("/api/users/logout", function (\Tina4\Response $response){
+    session_destroy();
+    unset($_SESSION);
+    return $response(["httpCode" => HTTP_OK, "action" => "redirect", "url" => "/"]);
+});
+
 \Tina4\Post::add("/api/users/login", function (\Tina4\Response $response, \Tina4\Request $request) {
     $user = new User();
     $user->username = $request->data->username;
