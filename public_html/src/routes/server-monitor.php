@@ -4,7 +4,7 @@
     return $response (\Tina4\renderTemplate("/api/servermonitors/grid.twig"), HTTP_OK, TEXT_HTML);
 });
 
-\Tina4\Get::add("/api/servermonitors/test", function (\Tina4\Response $response){
+\Tina4\Get::add("/api/servermonitors/check", function (\Tina4\Response $response){
     //Time checking is built into the monitoring class
     $monitoringService = new services\MonitoringService();
     $monitoringService->testTenants();

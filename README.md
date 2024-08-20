@@ -19,6 +19,16 @@ php bin/tina4service
 
 ### Production
 
+Setup a cron job that calls the check_servers.sh file. This file checks the servers every 10 seconds. Change the sleep inside the file to check more often or less often.
+
+```
+chmod +x \home\uptimemonitor\public_html\check_servers.sh
+```
+
+```
+* * * * * /home/uptimemonitor/public_html/check_servers.sh
+```
+
 Copy the `public_html/uptimemonitor.service` file to `/etc/systemd/system/`
 
 ### Make the php fpm file executable
