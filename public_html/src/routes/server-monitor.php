@@ -3,6 +3,13 @@
 \Tina4\Get::add("/api/servermonitors/landing", function (\Tina4\Response $response){
     return $response (\Tina4\renderTemplate("/api/servermonitors/grid.twig"), HTTP_OK, TEXT_HTML);
 });
+
+\Tina4\Get::add("/api/servermonitors/test", function (\Tina4\Response $response){
+    //Time checking is built into the monitoring class
+    $monitoringService = new services\MonitoringService();
+    $monitoringService->testTenants();
+    return $response ("Done Testing Servers", HTTP_OK, TEXT_HTML);
+});
         
 /**
  * CRUD Prototype ServerMonitor Modify as needed

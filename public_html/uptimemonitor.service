@@ -5,7 +5,7 @@ After=network.target
 
 [Service]
 WorkingDirectory=/home/uptimemonitor/public_html
-ExecStart=php /home/uptimemonitor/public_html/bin/tina4service
+ExecStart=/home/uptimemonitor/public_html/run_php_fpm.sh
 User=uptimemonitor
 Type=simple
 StandardOutput=syslog
