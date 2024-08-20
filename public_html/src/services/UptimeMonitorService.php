@@ -27,7 +27,7 @@ class UptimeMonitorService extends \Tina4\Process implements \Tina4\ProcessInter
         $DBA = new \Tina4\DataSQLite3('../database/'.$_ENV['DB_DATABASE'], $username="", $password="");
         //Establish database connection
         //What do we do here ???
-        //print("Running Service");
+        print("Running Service to check monitors");
 
         //Time checking is built into the monitoring class
         $monitoringService = new services\MonitoringService();
