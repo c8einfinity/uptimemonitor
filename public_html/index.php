@@ -1,7 +1,4 @@
 <?php
-//Used so that the diretory is correct for the service
-chdir(dirname(__FILE__));
-
 require_once "./vendor/autoload.php";
 
 global $DBA;

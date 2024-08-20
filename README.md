@@ -21,6 +21,10 @@ php bin/tina4service
 
 Copy the `public_html/uptimemonitor.service` file to `/etc/systemd/system/`
 
+### Make the php fpm file executable
+```
+chmod +x /path/to/run_php_fpm.sh
+```
 
 ```bash
 sudo systemctl enable uptimemonitor.service
