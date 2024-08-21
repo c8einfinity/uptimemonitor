@@ -15,7 +15,9 @@
             <select class="form-control" id="monitorTypeId" name="monitorTypeId" required>
                 <option value="">-- select monitor type --</option>
                 {% for monitortype in monitortypes %}
-                    <option value="{{ monitortype.id }}" {{ data.monitorTypeId == monitortype.id ? 'selected' : '' }}>{{ monitortype.monitorType }}</option>
+                    {% if monitortype.id == 5 %}
+                        <option value="{{ monitortype.id }}" {{ data.monitorTypeId == monitortype.id ? 'selected' : '' }}>{{ monitortype.monitorType }}</option>
+                    {% endif %}
                 {% endfor %}
             </select>
         </div>
