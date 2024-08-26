@@ -17,6 +17,7 @@ class Log extends \Tina4\ORM
     public $monitorName; //TODO: Change back to monitorType once monitorType is changed to monitorTypeId
 	public $statusCode;
 	public $rawResult;
+    public $responseTime;
 
     public $requiredFields = array(
         "monitorType",

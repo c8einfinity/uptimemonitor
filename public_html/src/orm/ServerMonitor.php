@@ -13,6 +13,7 @@ class ServerMonitor extends \Tina4\ORM
 	public $monitorTypeId;
 	public $domain;
 	public $port;
+	public $url;
 	public $status;
 	public $interval;
 	public $lastRun;
@@ -26,11 +27,11 @@ class ServerMonitor extends \Tina4\ORM
 	public $updatedAt;
 	public $serverName;
 	public $monitorType;
+	public $lastResponseTime;
 
 	public $requiredFields = array(
 		"serverId",
-		"monitorTypeId",
-		"port"
+		"monitorTypeId"
 	);
 
 	public $virtualFields = ["requiredFields", "serverName", "monitorType"];
