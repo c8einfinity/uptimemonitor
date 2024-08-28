@@ -13,10 +13,10 @@
  * @tags Notifications
  */
 \Tina4\Crud::route ("/api/notifications", new Notification(), function ($action, Notification $notification, $filter, \Tina4\Request $request) {
-    //Get the servers for a user
+    //Filter everthing based on a user - there is a user -> tenant (workspace) relationship
     if (!empty($filter['where']))
-        $filter['where'] = getUserServersFilter($filter['where']);
-    else $filter['where'] = getUserServersFilter("");
+        $filter['where'] = getWhereFilter($filter['where'], "tenant_id");
+    else $filter['where'] = getWhereFilter("", "tenant_id");
     
     switch ($action) {
        case "form":
@@ -65,10 +65,6 @@
             return $notification->select ("*", $filter["length"], $filter["start"])
                 ->where("{$where}")
                 ->orderBy($filter["orderBy"])
-                ->filter(static function(Notification $data) {
-                    $server = (new Server())->load("id = ?", [$data->serverId])->asObject();
-                    $data->serverName = $server->serverName;
-                })
                 ->filter(static function(Notification $data) {
                     $notificationType = (new NotificationType())->load("id = ?", [$data->notificationtypeId])->asObject();
                     $data->notificationType = $notificationType->notificationType;

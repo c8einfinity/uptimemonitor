@@ -24,6 +24,8 @@ class PortTester
 
                 \Tina4\Debug::message("Checking {$this->host} for port {$port["port"]}");
 
+                $startTime = microtime(true);
+
                 //Best way as you can set a timeout
                 $connection = @fsockopen($this->host, $port["port"], $errno, $errstr, 5);
 
@@ -34,10 +36,14 @@ class PortTester
             } catch (\Exception $e) {
                 $status = false;
             } finally {
+                $endTime = microtime(true);
+                $timeTaken = $endTime - $startTime;
+                
                 array_push($results, array(
                     "port" => $port["port"],
                     "status" => $status,
-                    "monitorId" => $port["monitorId"]
+                    "monitorId" => $port["monitorId"],
+                    "time" => $timeTaken
                 ));
             }
         }

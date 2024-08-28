@@ -24,6 +24,10 @@
             <label for="rawResult">Raw Result</label>
             <input class="form-control" type="text" id="rawResult" name="rawResult" placeholder="Raw Result" value="{{ data.rawResult }}" disabled>
         </div>
+        <div class="form-group col-md-6">
+            <label for="rawResult">Response Time</label>
+            <input class="form-control" type="text" id="responseTime" name="responseTime" placeholder="Response Time" value="{{ data.responseTime }}" disabled>
+        </div>
     </div>
     {{"logForm" | formToken | raw }}
 </form>

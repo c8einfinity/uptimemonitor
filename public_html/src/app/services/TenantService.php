@@ -25,11 +25,17 @@ class TenantService {
          * Iterate through all the servers and get the monitors
          */
         foreach ($servers as $server) {
+            //Get the server notifications - Based on tenant
+            $notification = new \Notification();
+            $notifications = $notification->select("*")
+                ->where("tenant_id = ?", [$server["tenantId"]])
+                ->asArray();
+
             //Test the Port (Sockets)
-            //$this->testPorts($server["serverName"], $server["id"], $server["ipAddress"]);
+            $this->testPorts($server["serverName"], $server["id"], $server["ipAddress"], $notifications);
 
             //Test the HTTP Monitors
-            $this->testHttp($server["serverName"], $server["id"], $server["ipAddress"]);
+            $this->testHttp($server["serverName"], $server["id"], $server["ipAddress"], $notifications);
         }
     }
 
@@ -45,7 +51,7 @@ class TenantService {
         //If we are only updating one server
         $where = $serverId > 0 ? $where . " and id = {$serverId}" : $where;
 
-        return $server->select("id, server_name, ip_address")
+        return $server->select("id, server_name, ip_address, tenant_id")
             ->where($where)
             ->asArray();
     }
@@ -98,11 +104,17 @@ class TenantService {
     /**
      * Port (Socket Connection) Tester
      */
-    private function testPorts($serverName, $serverId, $ipAddress) {
+    private function testPorts($serverName, $serverId, $ipAddress, $notifications) {
         //Get the monitors where we need to test sockets (ports)
         $socketMonitors = $this->getSocketMonitors($serverId);
 
         $ports = array();
+
+        $sendNotifications = false;
+
+        //If we have notifications configured then send notifications if needed
+        if (!empty($notifications))
+            $sendNotifications = true;
 
         foreach ($socketMonitors as $socketMonitor) {
             //See if we need to run it
@@ -125,31 +137,30 @@ class TenantService {
             $monitorType = "PORT"; //TODO Add to Constants or get from MonitorType table
             $statusCode = $result['status'] ? HTTP_OK : HTTP_INTERNAL_SERVER_ERROR;
 
-            if (!LogService::logResponse($serverId, $serverName, $monitorType, $statusCode, $result)) {
+            if (!LogService::logResponse($serverId, $serverName, $monitorType, $statusCode, $result, $result['time'])) {
                 \Tina4\Debug::message("Failed to log response. See previous debug message.");
             }
             else {
-                $sendSlackMessage = false;
-                $slackMessage = "Server: {$serverName} IP: {$ipAddress} Port: {$result["port"]} Status: {$statusCode}";
+                $alert = false;
+                $message = "Server: {$serverName} IP: {$ipAddress} Port: {$result["port"]} Status: {$statusCode} RESPONSE TIME: {$result['time']}";
 
                 //Get the previous monitor info to see if need to send a slack message if the server is online again
                 $previousStatus = $this->getPreviousStatus($result["monitorId"]);
 
                 if ($previousStatus != HTTP_OK && $result['status'] == HTTP_OK) {
-                    $sendSlackMessage = true;
-                    $slackMessage = "SERVER ONLINE AGAIN - " . $slackMessage;
+                    $message = "SERVER ONLINE AGAIN - " . $message;
+                    $alert = true;
                 }
                 
-                $this->updateMonitorInfo($result["monitorId"], $statusCode, $result);
+                $this->updateMonitorInfo($result["monitorId"], $statusCode, $result, $result['time']);
 
-                //Send to Slack - TODO: Read from config and see if we need to send to Slack
-                if ($statusCode != HTTP_OK) {
-                    $sendSlackMessage = true;
-                    $slackMessage = "SERVER ERROR: " . $slackMessage;
+                if ($result['status'] != HTTP_OK) {
+                    $message = "SERVER ERROR: " . $message;
+                    $alert = true;
                 }
-
-                if ($sendSlackMessage)
-                    $this->sendSlackMessage($slackMessage);
+                
+                if ($sendNotifications && $alert)
+                    $this->sendAlert($notifications, $message);
             }
         }
     }
@@ -157,9 +168,15 @@ class TenantService {
     /**
      * HTTP Tester - For specific Urls
      */
-    private function testHttp($serverName, $serverId, $ipAddress) {
+    private function testHttp($serverName, $serverId, $ipAddress, $notifications) {
         $httpMonitors = $this->getHttpMonitors($serverId);
         $monitorType= "HTTP/HTTPS"; //TODO: Add to Contants
+
+        $sendNotifications = false;
+
+        //If we have notifications configured then send notifications if needed
+        if (!empty($notifications))
+            $sendNotifications = true;
 
         foreach ($httpMonitors as $httpMonitor) {
             //See if we need to run it
@@ -175,27 +192,26 @@ class TenantService {
                 \Tina4\Debug::message("Failed to log response. See previous debug message.");
             }
             else {
-                $sendSlackMessage = false;
-                $slackMessage = "Server: {$serverName} IP: {$ipAddress} URL: {$httpMonitor["url"]} Status: {$result['status']} Response Time: {$result['time']}";
+                $alert = false;
+                $message = "Server: {$serverName} IP: {$ipAddress} URL: {$httpMonitor["url"]} Status: {$result['status']} Response Time: {$result['time']}";
                 
                 //Get the previous monitor info to see if need to send a slack message if the server is online again
                 $previousStatus = $this->getPreviousStatus($httpMonitor["id"]);
 
                 if ($previousStatus != HTTP_OK && $result['status'] == HTTP_OK) {
-                    $sendSlackMessage = true;
-                    $slackMessage = "SERVER ONLINE AGAIN - " . $slackMessage;
+                    $message = "SERVER ONLINE AGAIN - " . $message;
+                    $alert = true;
                 }
                 
                 $this->updateMonitorInfo($httpMonitor["id"], $result['status'], '', $result['time']);
 
-                //Send to Slack - TODO: Read from config and see if we need to send to Slack
                 if ($result['status'] != HTTP_OK) {
-                    $sendSlackMessage = true;
-                    $slackMessage = "SERVER ERROR: " . $slackMessage;
+                    $message = "SERVER ERROR: " . $message;
+                    $alert = true;
                 }
                 
-                if ($sendSlackMessage)
-                    $this->sendSlackMessage($slackMessage);
+                if ($sendNotifications && $alert)
+                    $this->sendAlert($notifications, $message);
             }
         }
     }
@@ -214,9 +230,31 @@ class TenantService {
     /**
      * Send a message to Slack
      */
-    private function sendSlackMessage($message) {
+    private function sendSlackMessage($message, $slackUrl) {
         $slackMessage = $message;
-        $slackHelper = new \helpers\SlackHelper();
-        $slackHelper->postMessage($slackMessage);
+        //$slackHelper = new \helpers\SlackHelper();
+        //$slackHelper->postMessage($slackMessage, $slackUrl);
+
+        \helpers\SlackHelper::postMessage($slackMessage, $slackUrl);
+    }
+
+    /**
+     * Send alert
+     */
+    private function sendAlert($notifications, $message) {
+        foreach ($notifications as $notification) {
+            switch ($notification['notificationtypeId']) {
+                case 1: //Email
+                    $toAddress = ["name" => $notification['emailAddress'], "email" => $notification['emailAddress']];
+                    
+                    $messegerHelper = new \helpers\MessengerHelper();
+                    $messegerHelper->sendMail($toAddress, "Uptime Monitor Alert", $message);
+                    break;
+                case 2: //Slack
+                    $this->sendSlackMessage($message, $notification['slackUrl']);
+                    break;
+            }
+        }
+
     }
 }

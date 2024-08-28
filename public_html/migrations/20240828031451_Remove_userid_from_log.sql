@@ -1,1 +1,0 @@
-ALTER TABLE log DROP COLUMN userid;

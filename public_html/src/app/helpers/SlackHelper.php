@@ -8,25 +8,22 @@ namespace helpers;
  * @description This helper is used to send messages to slack
  */
 class SlackHelper {
-    private $slackWebhookUrl;
 
-    public function __construct() {
+    /*public function __construct() {
         //TODO: Add this to a database
-        $this->slackWebhookUrl = $_ENV["SLACK_WEBHOOK"];
-    }
+        //$this->slackWebhookUrl = $_ENV["SLACK_WEBHOOK"];
+    }*/
 
-    public function postMessage($message) {
+    public static function postMessage($message, $slackWebhookUrl) {
 
         try {
-            $url = $this->slackWebhookUrl;
-
             $data = array(
                 'text' => $message
             );
 
             $jsonData = json_encode($data);
 
-            $ch = curl_init($url);
+            $ch = curl_init($slackWebhookUrl);
 
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
