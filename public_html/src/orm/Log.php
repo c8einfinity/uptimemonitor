@@ -9,21 +9,19 @@ class Log extends \Tina4\ORM
     //public $softDelete=true; //uncomment for soft deletes in crud 
     
 	public $id;
-	public $serverId;
+    public $serverId;
     public $serverName;
-    public $serverMonitorId;
 	public $createdAt;
-	public $monitorType;
-    public $monitorName; //TODO: Change back to monitorType once monitorType is changed to monitorTypeId
+    public $monitorType;
 	public $statusCode;
 	public $rawResult;
     public $responseTime;
+    public $userid;
 
     public $requiredFields = array(
-        "monitorType",
         "statusCode",
         "rawResult"
     );
 
-    public $virtualFields = ["requiredFields", "serverName", "monitorName"];
+    public $virtualFields = ["requiredFields"];
 }

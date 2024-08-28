@@ -122,21 +122,34 @@ class TenantService {
 
         foreach ($results as $result) {
             //TODO: Add MonitorType to Constants
-            $monitorType = 5;
+            $monitorType = "PORT"; //TODO Add to Constants or get from MonitorType table
             $statusCode = $result['status'] ? HTTP_OK : HTTP_INTERNAL_SERVER_ERROR;
 
-            if (!LogService::logResponse($serverId, $result["monitorId"], $monitorType, $statusCode, $result)) {
+            if (!LogService::logResponse($serverId, $serverName, $monitorType, $statusCode, $result)) {
                 \Tina4\Debug::message("Failed to log response. See previous debug message.");
             }
             else {
+                $sendSlackMessage = false;
+                $slackMessage = "Server: {$serverName} IP: {$ipAddress} Port: {$result["port"]} Status: {$statusCode}";
+
+                //Get the previous monitor info to see if need to send a slack message if the server is online again
+                $previousStatus = $this->getPreviousStatus($result["monitorId"]);
+
+                if ($previousStatus != HTTP_OK && $result['status'] == HTTP_OK) {
+                    $sendSlackMessage = true;
+                    $slackMessage = "SERVER ONLINE AGAIN - " . $slackMessage;
+                }
+                
                 $this->updateMonitorInfo($result["monitorId"], $statusCode, $result);
 
                 //Send to Slack - TODO: Read from config and see if we need to send to Slack
                 if ($statusCode != HTTP_OK) {
-                    $slackMessage = "SERVER ERROR: Server: {$serverName} IP: {$ipAddress} Port: {$result["port"]} Status: {$statusCode}";
-                    $slackHelper = new \helpers\SlackHelper();
-                    $slackHelper->postMessage($slackMessage);
+                    $sendSlackMessage = true;
+                    $slackMessage = "SERVER ERROR: " . $slackMessage;
                 }
+
+                if ($sendSlackMessage)
+                    $this->sendSlackMessage($slackMessage);
             }
         }
     }
@@ -146,7 +159,7 @@ class TenantService {
      */
     private function testHttp($serverName, $serverId, $ipAddress) {
         $httpMonitors = $this->getHttpMonitors($serverId);
-        $monitorType = 1;
+        $monitorType= "HTTP/HTTPS"; //TODO: Add to Contants
 
         foreach ($httpMonitors as $httpMonitor) {
             //See if we need to run it
@@ -158,19 +171,52 @@ class TenantService {
 
             $result = $httpTester->testUrl();
 
-            if (!LogService::logResponse($serverId, $httpMonitor["id"], $monitorType, $result['status'], '', $result['time'])) {
+            if (!LogService::logResponse($serverId, $serverName, $monitorType, $result['status'], '', $result['time'])) {
                 \Tina4\Debug::message("Failed to log response. See previous debug message.");
             }
             else {
+                $sendSlackMessage = false;
+                $slackMessage = "Server: {$serverName} IP: {$ipAddress} URL: {$httpMonitor["url"]} Status: {$result['status']} Response Time: {$result['time']}";
+                
+                //Get the previous monitor info to see if need to send a slack message if the server is online again
+                $previousStatus = $this->getPreviousStatus($httpMonitor["id"]);
+
+                if ($previousStatus != HTTP_OK && $result['status'] == HTTP_OK) {
+                    $sendSlackMessage = true;
+                    $slackMessage = "SERVER ONLINE AGAIN - " . $slackMessage;
+                }
+                
                 $this->updateMonitorInfo($httpMonitor["id"], $result['status'], '', $result['time']);
 
                 //Send to Slack - TODO: Read from config and see if we need to send to Slack
                 if ($result['status'] != HTTP_OK) {
-                    $slackMessage = "SERVER ERROR: Server: {$serverName} IP: {$ipAddress} URL: {$httpMonitor["url"]} Status: {$result['status']}";
-                    $slackHelper = new \helpers\SlackHelper();
-                    $slackHelper->postMessage($slackMessage);
+                    $sendSlackMessage = true;
+                    $slackMessage = "SERVER ERROR: " . $slackMessage;
                 }
+                
+                if ($sendSlackMessage)
+                    $this->sendSlackMessage($slackMessage);
             }
         }
+    }
+
+    /**
+     * Get the previous status of a monitor
+     */
+    private function getPreviousStatus($monitorId) {
+        $serverMonitor = new \ServerMonitor();
+        if ($serverMonitor->load("id = ?", [$monitorId])) {
+            return $serverMonitor->lastStatusCode;
+        }
+        return HTTP_INTERNAL_SERVER_ERROR;
+    }
+
+    /**
+     * Send a message to Slack
+     */
+    private function sendSlackMessage($message) {
+        $slackMessage = $message;
+        $slackHelper = new \helpers\SlackHelper();
+        $slackHelper->postMessage($slackMessage);
     }
 }

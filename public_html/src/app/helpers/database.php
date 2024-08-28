@@ -25,3 +25,23 @@
 
             return $serverMonitors;
      }
+
+     /**
+      * Get the server id from the server name - Used for filtering etc
+      */
+     function getServerIdFromServerName($serverName) {
+        $server = new Server();
+        $server = $server->load("server_name LIKE %?%", [$serverName])->asObject();
+
+        return $server->id;
+     }
+
+     /**
+      * Get the monitor type id from the monitor name - Used for filtering etc
+      */
+     function getMonitorTypeIdFromMonitorName($monitorName) {
+        $monitorType = new MonitorType();
+        $monitorType = $monitorType->load("monitor_type = ?", [$monitorName])->asObject();
+
+        return $monitorType->id;
+     }

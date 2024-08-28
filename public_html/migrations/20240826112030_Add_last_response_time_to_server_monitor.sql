@@ -1,1 +1,1 @@
-ALTER TABLE server_monitor ADD COLUMN last_response_time varchar(20) default '';
+s

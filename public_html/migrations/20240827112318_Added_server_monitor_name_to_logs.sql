@@ -1,0 +1,1 @@
+ALTER TABLE log ADD COLUMN server_monitor_name varchar(30) default '';

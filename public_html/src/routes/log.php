@@ -37,27 +37,18 @@
        break;
        case "read":
             //Return a dataset to be consumed by the grid with a filter
-            $where = "";
-            if (!empty($filter["where"])) {
+            if (!empty($filter["where"]))
                 $where = "{$filter["where"]}";
-            }
+            else $where = "";
 
             if (empty($filter["orderBy"]))
                 $filter["orderBy"] = "created_at desc";
         
-            return   $log->select ("*", $filter["length"], $filter["start"])
+            return $log->select ("*", $filter["length"], $filter["start"])
                 ->where("{$where}")
-                ->filter(static function(Log $data) {
-                    $server = (new Server())->load("id = ?", [$data->serverId])->asObject();
-                    $data->serverName = $server->serverName;
-                })
-                ->filter(static function(Log $data) {
-                    $monitor = (new MonitorType())->load("id = ?", [$data->monitorType])->asObject();
-                    $data->monitorName = $monitor->monitorType; //TODO: Change the db struture to monitorTypeId instead of monitorType
-                })
                 ->orderBy($filter["orderBy"])
                 ->asResult();
-        break;
+            break;
         case "create":
             //Check all required fields - helpers/general.php
             $result = checkRequiredFields($request, $log->requiredFields);

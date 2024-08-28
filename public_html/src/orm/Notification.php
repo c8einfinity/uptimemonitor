@@ -11,7 +11,7 @@ class Notification extends \Tina4\ORM
 	public $id;
 	public $serverId;
 	public $tenantId;
-	public $notificationTypeId;
+	public $notificationtypeId;
 	public $emailAlert;
 	public $emailAddress;
 	public $slackUrl;
@@ -21,9 +21,7 @@ class Notification extends \Tina4\ORM
 	public $updatedAt;
 
 	public $requiredFields = array(
-		"emailAlert",
-		"emailAddress",
-		"active"
+		"tenantId"
 	);
 
 	public $virtualFields = ["requiredFields"];
