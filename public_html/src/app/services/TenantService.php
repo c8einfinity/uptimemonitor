@@ -144,7 +144,7 @@ class TenantService {
             }
             else {
                 $alert = false;
-                $message = "Server: {$serverName} IP: {$ipAddress} Port: {$result["port"]} Status: {$statusCode} RESPONSE TIME: {$result['time']}";
+                $message = "UPTIMEMONITOR.AI\nSERVER: {$serverName}\nIP: {$ipAddress}\nPORT: {$result['port']}\nSTATUS: {$statusCode}\nSERVER TIME: " . date('Y-m-d H:i:s') . "\nRESPONSE TIME: {$result['time']}";
 
                 //Get the previous monitor info to see if need to send a slack message if the server is online again
                 $previousStatus = $this->getPreviousStatus($result["monitorId"]);
@@ -196,7 +196,7 @@ class TenantService {
             else {
                 $alert = false;
                 $forceNotification = false;
-                $message = "Server: {$serverName} IP: {$ipAddress} URL: {$httpMonitor["url"]} Status: {$result['status']} Response Time: {$result['time']}";
+                $message = "UPTIMEMONITOR.AI\nSERVER: {$serverName}\nIP: {$ipAddress}\nURL: {$httpMonitor['url']}\STATUS: {$result['status']}\nSERVER TIME: " . date('Y-m-d H:i:s') . "\nRESPONSE TIME: {$result['time']}";
                 
                 //Get the previous monitor info to see if need to send a slack message if the server is online again
                 $previousStatus = $this->getPreviousStatus($httpMonitor["id"]);
