@@ -61,7 +61,7 @@ class TenantService {
      */
     private function getSocketMonitors(int $serverId) {
         $serverMonitor = new \ServerMonitor();
-        return $serverMonitor->select("id, monitor_type_id, port, next_run")
+        return $serverMonitor->select("id, monitor_type_id, port, next_run, notification_count")
             ->where("server_id = ? and monitor_type_id = 5 and active = 1", [$serverId]) //TODO: Add MonitorType to Constants
             ->asArray();
     }
@@ -71,7 +71,7 @@ class TenantService {
      */
     private function getHttpMonitors(int $serverId) {
         $serverMonitor = new \ServerMonitor();
-        return $serverMonitor->select("id, monitor_type_id, url, next_run")
+        return $serverMonitor->select("id, monitor_type_id, url, next_run, notification_count")
             ->where("server_id = ? and monitor_type_id = 1 and active = 1", [$serverId])
             ->asArray();
     }
@@ -89,8 +89,10 @@ class TenantService {
 
             if ($statusCode == HTTP_OK) {
                 $status = "Online";
+                $serverMonitor->notificationCount = 0;
             } else {
                 $status = "Error";
+                $serverMonitor->notificationCount += 1;
             }
             $serverMonitor->lastResult = $statusCode;
             $serverMonitor->lastStatusCode = $statusCode;
@@ -193,6 +195,7 @@ class TenantService {
             }
             else {
                 $alert = false;
+                $forceNotification = false;
                 $message = "Server: {$serverName} IP: {$ipAddress} URL: {$httpMonitor["url"]} Status: {$result['status']} Response Time: {$result['time']}";
                 
                 //Get the previous monitor info to see if need to send a slack message if the server is online again
@@ -201,6 +204,7 @@ class TenantService {
                 if ($previousStatus != HTTP_OK && $result['status'] == HTTP_OK) {
                     $message = "SERVER ONLINE AGAIN - " . $message;
                     $alert = true;
+                    $forceNotification = true; //Used to force a notification even if the threshold has been reached
                 }
                 
                 $this->updateMonitorInfo($httpMonitor["id"], $result['status'], '', $result['time']);
@@ -210,8 +214,9 @@ class TenantService {
                     $alert = true;
                 }
                 
-                if ($sendNotifications && $alert)
-                    $this->sendAlert($notifications, $message);
+                if ($sendNotifications && $alert) {
+                    $this->sendAlert($notifications, $message, $httpMonitor['notificationCount'], $forceNotification);
+                }
             }
         }
     }
@@ -241,17 +246,21 @@ class TenantService {
     /**
      * Send alert
      */
-    private function sendAlert($notifications, $message) {
+    private function sendAlert($notifications, $message, $notificationCount = 0, $forceNotification = false) {
         foreach ($notifications as $notification) {
             switch ($notification['notificationtypeId']) {
                 case 1: //Email
                     $toAddress = ["name" => $notification['emailAddress'], "email" => $notification['emailAddress']];
                     
                     $messegerHelper = new \helpers\MessengerHelper();
-                    $messegerHelper->sendMail($toAddress, "Uptime Monitor Alert", $message);
+
+                    //Only send notifications if the threshold has not been reached - this is for failed connections
+                    if ($forceNotification || $notificationCount < $notification['threshold'])
+                        $messegerHelper->sendMail($toAddress, "Uptime Monitor Alert", $message);
                     break;
                 case 2: //Slack
-                    $this->sendSlackMessage($message, $notification['slackUrl']);
+                    if ($forceNotification || $notificationCount < $notification['threshold'])
+                        $this->sendSlackMessage($message, $notification['slackUrl']);
                     break;
             }
         }

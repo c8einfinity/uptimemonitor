@@ -26,13 +26,7 @@ class PortTester
 
                 $startTime = microtime(true);
 
-                //Best way as you can set a timeout
-                $connection = @fsockopen($this->host, $port["port"], $errno, $errstr, 5);
-
-                if ($connection) {
-                    $status = true;
-                    fclose($connection);
-                }
+                $status = $this->connectToPort($port);
             } catch (\Exception $e) {
                 $status = false;
             } finally {
@@ -49,5 +43,39 @@ class PortTester
         }
 
         return $results;
+    }
+
+    /**
+     * Added this so that we can check again if it fails the 1st time
+     */
+    private function connectToPort($port) {
+        $status = false;
+
+        try {
+            //Best way as you can set a timeout
+            $connection = @fsockopen($this->host, $port["port"], $errno, $errstr, 5);
+
+            if ($connection) {
+                fclose($connection);
+                $status = true;
+            }
+            else {
+                //Try again
+                sleep(5);
+
+                $connection = @fsockopen($this->host, $port["port"], $errno, $errstr, 5);
+
+                if ($connection) {
+                    fclose($connection);
+                    $status = true;
+                }
+            }
+        }
+        catch (\Exception $e) {
+            $status = false;
+        }
+        finally {
+            return $status;
+        }
     }
 }

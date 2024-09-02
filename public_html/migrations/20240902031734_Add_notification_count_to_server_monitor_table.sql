@@ -1,0 +1,1 @@
+ALTER TABLE server_monitor ADD COLUMN notification_count integer default 0 not null;

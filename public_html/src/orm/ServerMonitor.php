@@ -28,6 +28,7 @@ class ServerMonitor extends \Tina4\ORM
 	public $serverName;
 	public $monitorType;
 	public $lastResponseTime;
+	public $notificationCount; //Used to limit the number of notifications sent - threshold in the notification table
 
 	public $requiredFields = array(
 		"serverId",
