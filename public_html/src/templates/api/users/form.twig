@@ -1,59 +1,39 @@
 <form id="userForm" enctype="multipart/form-data" xmlns="http://www.w3.org/1999/html">
     <div class="row">
-                    <div class="form-group col-md-6">
-                <label for="batchSize">Batch Size</label>
-                <input class="form-control" type="text" id="batchSize"
-                       name="batchSize" placeholder="Batch Size"
-                       value="{{ data.batchSize }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="batchCount">Batch Count</label>
-                <input class="form-control" type="text" id="batchCount"
-                       name="batchCount" placeholder="Batch Count"
-                       value="{{ data.batchCount }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="batchStarted">Batch Started</label>
-                <input class="form-control" type="text" id="batchStarted"
-                       name="batchStarted" placeholder="Batch Started"
-                       value="{{ data.batchStarted }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="id">Id</label>
-                <input class="form-control" type="text" id="id"
-                       name="id" placeholder="Id"
-                       value="{{ data.id }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="username">Username</label>
-                <input class="form-control" type="text" id="username"
-                       name="username" placeholder="Username"
-                       value="{{ data.username }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="password">Password</label>
-                <input class="form-control" type="text" id="password"
-                       name="password" placeholder="Password"
-                       value="{{ data.password }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="email">Email</label>
-                <input class="form-control" type="text" id="email"
-                       name="email" placeholder="Email"
-                       value="{{ data.email }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="createdAt">Created At</label>
-                <input class="form-control" type="text" id="createdAt"
-                       name="createdAt" placeholder="Created At"
-                       value="{{ data.createdAt }}">
-            </div>
-                    <div class="form-group col-md-6">
-                <label for="updatedAt">Updated At</label>
-                <input class="form-control" type="text" id="updatedAt"
-                       name="updatedAt" placeholder="Updated At"
-                       value="{{ data.updatedAt }}">
-            </div>
-            </div>
+        <div class="form-group col-md-6">
+            <label for="id">Id</label>
+            <input class="form-control" type="text" id="id" name="id" placeholder="Id" value="{{ data.id }}" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="username">Username</label>
+            <input class="form-control" type="text" id="username" name="username" placeholder="Username" value="{{ data.username }}">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="password">Password</label>
+            <input class="form-control" type="password" id="password" name="password" placeholder="Password" value="{{ data.password }}" readonly>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="email">Email</label>
+            <input class="form-control" type="text" id="email" name="email" placeholder="Email" value="{{ data.email }}">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="tenantId">User Role {{userrole.userRoleId}}</label>
+            <select class="form-control" type="text" id="userRoleId" name="userRoleId" required>
+                <option value="">-- select user role --</option>
+                {% for userroletype in userroletypes %}
+                    <option value="{{ userroletype.id }}" {{ data.userRoleId == userroletype.id ? 'selected' : '' }}>{{ userroletype.userRoleType }}</option>
+                {% endfor %}    
+            </select>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="tenantId">Default Timezone</label>
+            <select class="form-control" type="text" id="defaultTimezoneId" name="defaultTimezoneId" required>
+                <option value="">-- select timezone --</option>
+                {% for timezone in timezones %}
+                    <option value="{{ timezone.id }}" {{ data.defaultTimezoneId == timezone.id ? 'selected' : '' }}>{{ timezone.timezone }}</option>
+                {% endfor %}    
+            </select>
+        </div>
+    </div>
     {{"userForm" | formToken | raw }}
 </form>

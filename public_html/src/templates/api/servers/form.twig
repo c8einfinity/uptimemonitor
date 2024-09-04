@@ -18,6 +18,15 @@
             <input class="form-control" type="text" id="ipAddress" name="ipAddress" placeholder="IP Address" value="{{ data.ipAddress }}" required>
         </div>
         <div class="form-group col-md-6">
+            <label for="tenantId">Timezone</label>
+            <select class="form-control" type="text" id="timezoneId" name="timezoneId" required>
+                <option value="">-- select timezone --</option>
+                {% for timezone in timezones %}
+                    <option value="{{ timezone.id }}" {{ (data.timezoneId == timezone.id or (defaultTimezone > 0 and defaultTimezone == timezone.id)) ? 'selected' : '' }}>{{ timezone.timezone }}</option>
+                {% endfor %}    
+            </select>
+        </div>
+        <div class="form-group col-md-6">
             <label for="serverDescription">Server Description</label>
             <input class="form-control" type="text" id="serverDescription" name="serverDescription" placeholder="Server Description" value="{{ data.serverDescription }}">
         </div>

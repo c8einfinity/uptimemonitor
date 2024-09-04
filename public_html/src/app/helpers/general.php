@@ -62,6 +62,18 @@ function getWhereFilter($filter, $field = 'id') {
 }
 
 /**
+ * Filter to get users that are linked to a specific account / admin user
+ */
+function getUsersFiter($filter, $field = 'id') {
+    if (!empty($filter))
+        $filter .= ' AND id = '.$_SESSION["userid"];
+    else
+        $filter = 'id = '.$_SESSION["userid"];
+
+    return $filter;
+}
+
+/**
  * Get the tenants linked to a specific user
  */
 function getUserTenants() {

@@ -1,7 +1,7 @@
 <?php
-class User extends \Tina4\ORM
+class UserRoleType extends \Tina4\ORM
 {
-    public $tableName="user";
+    public $tableName="user_role_type";
     public $primaryKey="id"; //set for primary key
     //public $fieldMapping = ["id" => "id","username" => "username","password" => "password","email" => "email","createdAt" => "created_at","updatedAt" => "updated_at"];
     //public $genPrimaryKey=false; //set to true if you want to set the primary key
@@ -9,20 +9,13 @@ class User extends \Tina4\ORM
     //public $softDelete=true; //uncomment for soft deletes in crud 
     
 	public $id;
-	public $username;
-    public $fullName;
-	public $password;
-	public $email;
-    public $defaultTimezoneId;
-    public $userRoleId;
+	public $userRoleType;
 	public $createdAt;
 	public $updatedAt;
 
     public $requiredFields = array(
-        "username",
-        "password",
-        "email"
+        "userRoleType"
     );
 
-    public $virtualFields = ["requiredFields", "userRoleId"];
+    public $virtualFields = ["requiredFields"];
 }

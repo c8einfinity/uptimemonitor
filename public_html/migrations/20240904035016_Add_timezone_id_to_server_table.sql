@@ -1,0 +1,1 @@
+ALTER TABLE server ADD COLUMN timezone_id integer default 0 not null;

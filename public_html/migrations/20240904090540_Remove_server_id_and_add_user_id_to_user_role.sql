@@ -1,0 +1,2 @@
+ALTER TABLE user_role DROP COLUMN server_id;
+ALTER TABLE user_role ADD COLUMN user_id INTEGER DEFAULT 0 NOT NULL;

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © 2024 - Code Infinity. All right reserved.
+ *
+ * @author Philip Malan <philip@codeinfinity.co.za>
+ */
 
 \Tina4\Get::add("/api/tenants/landing", function (\Tina4\Response $response){
     return $response (\Tina4\renderTemplate("/api/tenants/grid.twig"), HTTP_OK, TEXT_HTML);

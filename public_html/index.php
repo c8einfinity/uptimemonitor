@@ -27,5 +27,16 @@ $email->sendMail(["name" => "Philip", "email" => "philip.malan@gmail.com"], "Tes
 
 //$monitoringService->testTenants();
 
+/*date_default_timezone_set('UTC'); // Set the default timezone
+
+$timezones = timezone_identifiers_list();
+$current_time = date('Y-m-d H:i:s');
+
+foreach ($timezones as $timezone) {
+    echo "INSERT INTO timezones (timezone) VALUES ('$timezone');\n";
+}*/
+
+
+
 echo new \Tina4\Tina4Php($config);
 

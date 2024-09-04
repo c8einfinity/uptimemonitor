@@ -1,0 +1,35 @@
+<form id="timezoneForm" enctype="multipart/form-data" xmlns="http://www.w3.org/1999/html">
+    <div class="row">
+                    <div class="form-group col-md-6">
+                <label for="id">Id</label>
+                <input class="form-control" type="text" id="id"
+                       name="id" placeholder="Id"
+                       value="{{ data.id }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="timezone">Timezone</label>
+                <input class="form-control" type="text" id="timezone"
+                       name="timezone" placeholder="Timezone"
+                       value="{{ data.timezone }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="createdAt">Created At</label>
+                <input class="form-control" type="text" id="createdAt"
+                       name="createdAt" placeholder="Created At"
+                       value="{{ data.createdAt }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="updatedAt">Updated At</label>
+                <input class="form-control" type="text" id="updatedAt"
+                       name="updatedAt" placeholder="Updated At"
+                       value="{{ data.updatedAt }}">
+            </div>
+                    <div class="form-group col-md-6">
+                <label for="requiredFields">Required Fields</label>
+                <input class="form-control" type="text" id="requiredFields"
+                       name="requiredFields" placeholder="Required Fields"
+                       value="{{ data.requiredFields }}">
+            </div>
+            </div>
+    {{"timezoneForm" | formToken | raw }}
+</form>

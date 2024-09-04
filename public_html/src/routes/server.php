@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © 2024 - Code Infinity. All right reserved.
+ *
+ * @author Philip Malan <philip@codeinfinity.co.za>
+ */
 
 \Tina4\Get::add("/api/servers/landing", function (\Tina4\Response $response){
     return $response (\Tina4\renderTemplate("/api/servers/grid.twig"), HTTP_OK, TEXT_HTML);
@@ -31,15 +36,21 @@
                 ->orderBy("tenant_name")
                 ->asArray();
 
+            $timezone = new Timezone();
+            $timezones = $timezone->select("id, timezone", 500)
+                ->orderBy("timezone")
+                ->asArray();
              
             if ($action == "form") {
+                $defaultTimezone = $_SESSION["defaultTimezoneId"];
+                
                 $title = "Add Server";
                 $savePath =  TINA4_SUB_FOLDER . "/api/servers";
-                $content = \Tina4\renderTemplate("/api/servers/form.twig", ["tenants" => $tenants]);
+                $content = \Tina4\renderTemplate("/api/servers/form.twig", ["tenants" => $tenants, "timezones" => $timezones, "defaultTimezone" => $defaultTimezone]);
             } else {
                 $title = "Edit Server";
                 $savePath =  TINA4_SUB_FOLDER . "/api/servers/".$server->id;
-                $content = \Tina4\renderTemplate("/api/servers/form.twig", ["data" => $server, "tenants" => $tenants]);
+                $content = \Tina4\renderTemplate("/api/servers/form.twig", ["data" => $server, "tenants" => $tenants, "timezones" => $timezones]);
             }
 
             return \Tina4\renderTemplate("components/modalForm.twig", ["title" => $title, "onclick" => "if ( $('#serverForm').valid() ) { saveForm('serverForm', '" .$savePath."', 'message'); $('#formModal').modal('hide');}", "content" => $content]);
@@ -69,6 +80,10 @@
 
             //Set to active by default
             $server->active = 1;
+
+            //If no timezone is set the set to the default timezone
+            if (empty($server->timezoneId)) 
+                $server->timezoneId = $_SESSION["defaultTimezoneId"];
 
             if ($result->httpCode != HTTP_OK)
             {

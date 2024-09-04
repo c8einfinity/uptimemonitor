@@ -1,0 +1,1 @@
+insert or replace into user_role_type (id, user_role_type) values (1, 'Admin');
